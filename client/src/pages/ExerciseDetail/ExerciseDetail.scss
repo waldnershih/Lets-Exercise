@@ -1,0 +1,30 @@
+.app__exercise-detail {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	padding: 80px 80px;
+}
+
+.detail-container {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+
+.horizontal-scrollbar-container {
+	width: 100%;
+	h2 {
+		text-align: left;
+		font-weight: 700;
+		margin-top: 15px;
+	}
+}
+
+.card-detail-container {
+	flex: 1;
+}
+
+.video-container {
+	flex: 1;
+}

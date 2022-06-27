@@ -1,24 +1,33 @@
-import React from "react";
-import { Home, NotFound } from "./pages";
-import {
-	BrowserRouter as Router,
-	Route,
-	Routes,
-	Navigate,
-} from "react-router-dom";
-import history from "./history";
+import React, { useState } from 'react';
 
-import "./App.scss";
+import { Home, ExerciseDetail, NotFound } from './pages';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { Footer, Header, Sidebar } from './components';
+import { useLocation } from 'react-router-dom';
+
+import './App.scss';
 
 const App = () => {
+	const isAuth = true;
+	const location = useLocation();
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
 	return (
-		<Router history={history}>
+		<div className="app">
+			{location.pathname !== '/404' && <Header setIsSidebarOpen={setIsSidebarOpen} />}
+			{isSidebarOpen && <Sidebar setIsSidebarOpen={setIsSidebarOpen} />}
 			<Routes>
-				<Route path="/" exact element={<Home />} />
+				<Route path="/" exact element={<Home isAuth={isAuth} />} />
+				<Route
+					path="/exercisedetail/:id"
+					exact
+					element={<ExerciseDetail isAuth={isAuth} />}
+				/>
 				<Route path="/404" exact element={<NotFound />} />
 				<Route path="*" element={<Navigate replace to="/404" />} />
 			</Routes>
-		</Router>
+			{location.pathname !== '/404' && <Footer />}
+		</div>
 	);
 };
 

@@ -1,14 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
 :root {
 	/* --font-base: 'DM Sans', sans-serif; */
-	--font-base: "Lato", sans-serif;
-	--font-title: "Playfair Display", serif;
+	--font-base: 'Lato', sans-serif;
+	--font-title: 'Playfair Display', serif;
 
-	--primary-color: #edf2f8;
+	--primary-color: #fff9f9;
 	--secondary-color: #1c75eb;
 	--secondary-color-20: rgba(28, 117, 235, 10%);
-	--black-color: #414a4c;
+	--black-color: #3a3a3a;
 	--gray-color: #808080;
 	--brown-color: #746179;
 	--white-color: #ffffff;
@@ -18,10 +18,15 @@
 
 	--lightRed-color: #fa9393;
 	--lightYellow-color: #fef7e1;
-	--lightGreen-color: #7e9d7e;
+	--lightGreen-color: #ccffcc;
 	--lightBlue-color: #e6f5fe;
 	--lightPurple-color: #e3e3ff;
 	--lightGray-color: #ebe8e8;
+
+	--dividerRed-color: #895454;
+	--skin-color: #ffead7;
+	--darkSkin-color: #ffcea1;
+	--transparentRed-color: #ffe7e7;
 
 	--darkBlue-color: #222b56;
 	--darkApricot-color: #8e5a26;
@@ -38,8 +43,10 @@ html,
 body,
 #root {
 	width: 100vw;
-	height: auto;
+	min-height: 100vh;
 	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
 }
 
 h1,
@@ -52,4 +59,25 @@ h5 {
 
 p {
 	font-family: var(--font-base);
+}
+
+svg {
+	height: 24px;
+	width: 24px;
+	opacity: 0.8;
+	color: var(--black-color);
+}
+
+svg:hover {
+	cursor: pointer;
+	opacity: 1;
+}
+
+input {
+	border-color: none;
+	border: 1px solid var(--gray-color);
+}
+
+a {
+	text-decoration: none;
 }

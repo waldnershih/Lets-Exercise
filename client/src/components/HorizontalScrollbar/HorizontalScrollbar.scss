@@ -1,0 +1,14 @@
+.right-arrow,
+.left-arrow {
+	display: none;
+	height: 50px;
+	width: 50px;
+	padding: 20px;
+	border-radius: 50%;
+	background-color: var(--lightBlue-color);
+	opacity: 0.7;
+	&:hover {
+		opacity: 1;
+		cursor: pointer;
+	}
+}
