@@ -33,7 +33,11 @@ const HorizontalScrollbar = ({ items }) => {
 			className="app__horizontal-scrollbar"
 		>
 			{items.map(item => (
-				<Link key={`${item.name}-${item.id}`} to={`/exercisedetail/${item.id}`}>
+				<Link
+					itemId={`${item.name}-${item.id}`}
+					key={`${item.name}-${item.id}`}
+					to={`/exercisedetail/${item.id}`}
+				>
 					<Card exercise={item} />
 				</Link>
 			))}

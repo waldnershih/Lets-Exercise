@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Logo } from '../../assets';
 import { GrFormClose } from 'react-icons/gr';
 import { AiOutlineSchedule } from 'react-icons/ai';
@@ -11,10 +12,12 @@ const routes = [
 	{
 		icon: <CgGym />,
 		title: 'Exercise',
+		path: '/',
 	},
 	{
 		icon: <AiOutlineSchedule />,
 		title: 'Schedule',
+		path: '/schedule',
 	},
 ];
 
@@ -31,10 +34,12 @@ const Sidebar = ({ setIsSidebarOpen }) => {
 				</div>
 				<Divider />
 				{routes.map(route => (
-					<div className="route-box" key={route}>
-						{route.icon}
-						<h2 className="subHead-text">{route.title}</h2>
-					</div>
+					<Link to={route.path} onClick={() => setIsSidebarOpen(preState => !preState)}>
+						<div className="route-box" key={route}>
+							{route.icon}
+							<h2 className="subHead-text">{route.title}</h2>
+						</div>
+					</Link>
 				))}
 			</div>
 		</div>
