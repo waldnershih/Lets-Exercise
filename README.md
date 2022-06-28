@@ -1,6 +1,6 @@
 # LETS EXERCISE
 
-## Address
+## Url
 
 - [APP](https://lets-exercise.netlify.app/)
 
