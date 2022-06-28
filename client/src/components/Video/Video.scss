@@ -1,0 +1,20 @@
+.app__video {
+	display: flex;
+	align-items: center;
+	margin: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	h2 {
+		text-align: left;
+		margin-left: 15px;
+	}
+	img {
+		object-fit: cover;
+		width: 300px;
+	}
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.5);
+		h2 {
+			color: var(--snow-color);
+		}
+	}
+}

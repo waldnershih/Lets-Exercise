@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchData, exerciseOptions } from '../../apis';
-
-const baseExerciseUrl = 'https://exercisedb.p.rapidapi.com';
+import { fetchData, exerciseOptions, baseExerciseUrl } from '../../apis';
 
 const initialExercisesState = {
 	exercises: [],

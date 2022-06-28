@@ -1,14 +1,22 @@
 .app__card-details {
-	width: 50%; //?
-	padding: 40px 0;
+	// width: 50%; //?
+	flex: 1;
+	// padding: 40px 0;
 	display: flex;
 	// justify-content: center;
 	// align-items: center;
+	margin: 20px;
 	flex-direction: column;
 
 	img {
 		object-fit: cover;
 		width: 100%;
+	}
+	p {
+		span {
+			font-weight: 700;
+			// color: val(--secondary-color);
+		}
 	}
 }
 

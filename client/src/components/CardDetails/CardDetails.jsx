@@ -24,8 +24,9 @@ const CardDetails = ({ data }) => {
 			<p className="p-text-18">
 				Exercises keep you strong.{' '}
 				<span style={{ textTransform: 'capitalize' }}>{name}</span> is one of the best{' '}
-				<br /> exercises to train your {target}. It will help you improve your <br /> mood
-				and gain energy.
+				<br /> exercises to train your{' '}
+				<span style={{ textTransform: 'capitalize' }}>{target}</span>. It will help you
+				improve your <br /> mood and gain energy.
 			</p>
 		</div>
 	);

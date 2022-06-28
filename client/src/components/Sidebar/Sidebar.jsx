@@ -34,7 +34,11 @@ const Sidebar = ({ setIsSidebarOpen }) => {
 				</div>
 				<Divider />
 				{routes.map(route => (
-					<Link to={route.path} onClick={() => setIsSidebarOpen(preState => !preState)}>
+					<Link
+						to={route.path}
+						onClick={() => setIsSidebarOpen(preState => !preState)}
+						key={route.title}
+					>
 						<div className="route-box" key={route}>
 							{route.icon}
 							<h2 className="subHead-text">{route.title}</h2>
