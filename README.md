@@ -2,7 +2,7 @@
 
 ## Url
 
-- [APP](https://lets-exercise.netlify.app/)
+-   [APP](https://lets-exercise.netlify.app/)
 
 ## Arch
 
@@ -15,3 +15,7 @@
     -   nodejs/ express/ dockerfile/ jwt
 
 -   db
+
+# Diagram
+
+![alt text](https://github.com/waldnershih/Lets-Exercise/blob/main/diagram.jpg?raw=true)
