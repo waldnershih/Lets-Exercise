@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const exercisesModel = require('../collections/exercises');
+const exerciseModel = require('../collections/exercises');
 const { INTERNAL_SERVER_ERROR } = require('../../utils/error');
 
 const exerciseFilePath = path.join(
@@ -34,7 +34,7 @@ async function saveExercise(data) {
 	const { id, bodyPart, gifUrl, name, target, equipment } = data;
 	// console.log(id);
 	try {
-		await exercisesModel.updateOne(
+		await exerciseModel.updateOne(
 			{
 				id,
 				bodyPart,
@@ -62,10 +62,9 @@ async function saveExercise(data) {
 
 async function getAllExercises() {
 	try {
-		const exercises = await exercisesModel.find(
+		const exercises = await exerciseModel.find(
 			{},
 			{
-				_id: 0,
 				__v: 0,
 			},
 		);
@@ -78,10 +77,9 @@ async function getAllExercises() {
 
 async function getExerciseById(id) {
 	try {
-		const exercise = await exercisesModel.findOne(
+		const exercise = await exerciseModel.findOne(
 			{ id },
 			{
-				_id: 0,
 				__v: 0,
 			},
 		);
@@ -94,10 +92,9 @@ async function getExerciseById(id) {
 
 async function getExercisesByBodyPart(bodyPart) {
 	try {
-		const exercises = await exercisesModel.find(
+		const exercises = await exerciseModel.find(
 			{ bodyPart },
 			{
-				_id: 0,
 				__v: 0,
 			},
 		);
@@ -110,10 +107,9 @@ async function getExercisesByBodyPart(bodyPart) {
 
 async function getExercisesByEquipment(equipment) {
 	try {
-		const exercises = await exercisesModel.find(
+		const exercises = await exerciseModel.find(
 			{ equipment },
 			{
-				_id: 0,
 				__v: 0,
 			},
 		);
@@ -126,10 +122,9 @@ async function getExercisesByEquipment(equipment) {
 
 async function getExercisesByTarget(target) {
 	try {
-		const exercises = await exercisesModel.find(
+		const exercises = await exerciseModel.find(
 			{ target },
 			{
-				_id: 0,
 				__v: 0,
 			},
 		);

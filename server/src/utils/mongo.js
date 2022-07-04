@@ -4,30 +4,34 @@ if (process.env.NODE_ENV !== 'production') {
 
 const mongoose = require('mongoose');
 const { loadExercisesData } = require('../controllers/exercises');
-const { db } = require('../models/collections/exercises');
+// const { MONGO_CONNECTION_ERROR } = require('../utils/error');
 
 const MONGO_URL = process.env.MONGO_URL;
 
 const dbClient = mongoose.connection;
 
-dbClient.on('open', () => {
+dbClient.once('open', () => {
 	console.log('Connected to MongoDB');
-	dbClient.db.collection('exercises').count(async (err, count) => {
-		if (count == 0) {
-			await loadExercisesData();
-		}
-	});
+	try {
+		dbClient.db.collection('exercises').count(async (err, count) => {
+			if (count == 0) {
+				await loadExercisesData();
+			}
+		});
+	} catch (error) {
+		console.error(error);
+	}
 });
 dbClient.on('error', err => {
 	console.error(err);
 });
 
 async function mongoConnect() {
-	await mongoose.connect(MONGO_URL);
+	return await mongoose.connect(MONGO_URL);
 }
 
 async function mongoDisconnect() {
-	await mongoose.connection.close();
+	return await mongoose.connection.close();
 }
 
 module.exports = { mongoConnect, mongoDisconnect };

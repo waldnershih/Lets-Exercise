@@ -13,13 +13,15 @@ const PORT = process.env.PORT || 8000;
 const server = http.createServer(app);
 
 async function startServer() {
-	await mongoConnect();
+	try {
+		await mongoConnect();
+	} catch (error) {
+		console.log(error);
+	}
 
 	server.listen(PORT, () => {
 		console.log(`Linstening on ${PORT}...`);
 	});
 }
-
-// console.log(readJsonFile());
 
 startServer();
