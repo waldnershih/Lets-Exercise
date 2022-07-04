@@ -6,15 +6,20 @@ if (process.env.NODE_ENV !== 'production') {
 
 const http = require('http');
 const app = require('./app');
+const { mongoConnect } = require('./utils/mongo');
 
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
 
 async function startServer() {
+	await mongoConnect();
+
 	server.listen(PORT, () => {
 		console.log(`Linstening on ${PORT}...`);
 	});
 }
+
+// console.log(readJsonFile());
 
 startServer();

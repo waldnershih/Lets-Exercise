@@ -1,0 +1,21 @@
+const errorHandler = require('./errorHnadler');
+const {
+	UNKNOWN_ERROR,
+	BAD_REQUEST,
+	WORD_ALREADY_EXISTS,
+	FIELD_MISSING,
+	WORD_NOT_FOUND,
+	DOCUMENT_NOT_FOUND,
+	INTERNAL_SERVER_ERROR,
+} = require('./errorMessage');
+
+module.exports = {
+	errorHandler,
+	UNKNOWN_ERROR,
+	BAD_REQUEST,
+	WORD_ALREADY_EXISTS,
+	FIELD_MISSING,
+	WORD_NOT_FOUND,
+	DOCUMENT_NOT_FOUND,
+	INTERNAL_SERVER_ERROR,
+};
