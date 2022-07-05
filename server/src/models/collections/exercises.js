@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const reviewsModel = require('./reviews');
 
 const ExerciseSchema = new Schema(
 	{
+		// id retrieved from exerciseDB API
 		id: {
 			type: String,
 			required: true,
@@ -32,5 +34,18 @@ const ExerciseSchema = new Schema(
 	},
 	{ timestamps: true },
 );
+
+ExerciseSchema.post('findOneAndDelete', async doc => {
+	if (doc) {
+		try {
+			// remove reviews associated with this exercise
+			await reviewsModel.deleteMany({
+				exerciseId: doc.id,
+			});
+		} catch (err) {
+			throw { status: 500, message: err.message };
+		}
+	}
+});
 
 module.exports = mongoose.model('exercises', ExerciseSchema);

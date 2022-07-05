@@ -1,9 +1,9 @@
 const userModel = require('../collections/users');
 const { INTERNAL_SERVER_ERROR, ALREADY_EXISTS } = require('../../utils/error');
 
-async function registerUser(email, password) {
+async function registerUser(user, password) {
 	try {
-		const newUser = new userModel({ email });
+		const newUser = new userModel(user);
 		const registeredUser = await userModel.register(newUser, password);
 		return registeredUser;
 	} catch (err) {

@@ -14,7 +14,7 @@ const ReviewSchema = new Schema(
 			required: true,
 		},
 		owner: {
-			id: {
+			ownerId: {
 				type: String,
 				required: true,
 				unique: true,
@@ -23,6 +23,11 @@ const ReviewSchema = new Schema(
 				type: String,
 				required: true,
 			},
+		},
+		// id retrieved from exerciseDB API, eg: '0001'
+		exerciseId: {
+			type: String,
+			required: true,
 		},
 	},
 	{ timestamps: true },

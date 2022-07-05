@@ -32,14 +32,14 @@ async function httpLoginUser(req, res, next) {
 }
 
 async function httpRegisterUser(req, res, next) {
-	const { email, password } = req.body;
+	const { name, email, password } = req.body;
 
-	if (!email || !password) {
+	if (!name || !email || !password) {
 		return next(FIELD_MISSING);
 	}
 
 	try {
-		const registeredUser = await registerUser(email, password);
+		const registeredUser = await registerUser({ email, name }, password);
 		const jwt = issueJWT(registeredUser);
 		res.status(201).send({
 			user: registeredUser,
@@ -83,8 +83,8 @@ async function httpDeleteUserById(req, res, next) {
 	// const {_id} = req.user;
 
 	try {
-		const deletedUser = await deleteUserById(id);
-		res.status(200).send(deletedUser);
+		const deletedUserId = await deleteUserById(id);
+		res.status(200).send(deletedUserId);
 	} catch (err) {
 		return next(err);
 	}

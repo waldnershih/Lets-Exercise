@@ -1,16 +1,23 @@
 const { Router } = require('express');
+const {
+	httpGetReviewsByExerciseId,
+	httpCreateReviewByExerciseId,
+	httpGetReviewById,
+	httpUpdateReviewById,
+	httpDeleteReviewById,
+} = require('../controllers/reviews');
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router
 	.route('/')
 	.get(httpGetReviewsByExerciseId)
-	.post(httpCreateReviewByExerciseId);
+	.post(verifyJWT, httpCreateReviewByExerciseId);
 
 router
-	.route('/review/:id')
-	.get(httpGetReviewById)
-	.patch(httpUpdateReviewById)
-	.delete(httpDeleteReviewById);
+	.route('/review/:reviewId')
+	.get(verifyJWT, httpGetReviewById)
+	.patch(verifyJWT, httpUpdateReviewById)
+	.delete(verifyJWT, httpDeleteReviewById);
 
 module.exports = router;
