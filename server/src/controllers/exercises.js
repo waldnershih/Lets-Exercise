@@ -5,6 +5,7 @@ const {
 	getExercisesByBodyPart,
 	getExercisesByEquipment,
 	getExercisesByTarget,
+	getBodyPartList,
 } = require('../models/services/exercises');
 
 // const { BAD_REQUEST, FIELD_MISSING } = require('../models/errors');
@@ -59,6 +60,15 @@ async function httpGetExercisesByTarget(req, res, next) {
 	}
 }
 
+async function httpGetBodyPartList(req, res, next) {
+	try {
+		const bodyPartList = await getBodyPartList();
+		res.status(200).json(bodyPartList);
+	} catch (err) {
+		next(err);
+	}
+}
+
 module.exports = {
 	httpGetAllExercises,
 	httpGetExerciseById,
@@ -66,4 +76,5 @@ module.exports = {
 	httpGetExercisesByEquipment,
 	httpGetExercisesByTarget,
 	loadExercisesData,
+	httpGetBodyPartList,
 };

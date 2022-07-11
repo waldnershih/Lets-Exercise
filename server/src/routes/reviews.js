@@ -6,6 +6,7 @@ const {
 	httpUpdateReviewById,
 	httpDeleteReviewById,
 } = require('../controllers/reviews');
+const { verifyJWT } = require('../utils/jwt');
 
 const router = Router({ mergeParams: true });
 

@@ -135,6 +135,16 @@ async function getExercisesByTarget(target) {
 	}
 }
 
+async function getBodyPartList() {
+	try {
+		const exercises = await exerciseModel.find().distinct('bodyPart');
+		return exercises;
+	} catch (err) {
+		console.log(err);
+		throw INTERNAL_SERVER_ERROR;
+	}
+}
+
 module.exports = {
 	loadExercisesData,
 	getAllExercises,
@@ -142,4 +152,5 @@ module.exports = {
 	getExercisesByBodyPart,
 	getExercisesByEquipment,
 	getExercisesByTarget,
+	getBodyPartList,
 };
