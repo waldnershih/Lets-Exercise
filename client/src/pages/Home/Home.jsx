@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { Card } from '../../components/';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchExercisesByTag, fetchTagList } from '../../redux/slices/exerciseSlice';
+import {
+	fetchExercisesByTag,
+	fetchTagList,
+} from '../../redux/slices/exerciseSlice';
 
 import './Home.scss';
 
@@ -19,7 +22,10 @@ const Home = ({ isAuth }) => {
 	}, []);
 
 	const rederCard = exercises.slice(0, 8).map(exercise => (
-		<Link key={`${exercise.name}-${exercise.id}`} to={`/exercisedetail/${exercise.id}`}>
+		<Link
+			key={`${exercise.name}-${exercise.id}`}
+			to={`/exercisedetail/${exercise.id}`}
+		>
 			<Card exercise={exercise} />
 		</Link>
 	));

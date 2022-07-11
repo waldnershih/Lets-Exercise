@@ -6,7 +6,14 @@ const initialExercisesState = {
 	targetMuscleExercises: [],
 	equipmentExercises: [],
 	tagList: [],
-	selectedExercise: { id: '', bodyPart: '', gifUrl: '', name: '', target: '', equipment: '' },
+	selectedExercise: {
+		id: '',
+		bodyPart: '',
+		gifUrl: '',
+		name: '',
+		target: '',
+		equipment: '',
+	},
 	loading: {
 		exerciseLoading: false,
 		targetMuscleloading: false,
@@ -21,24 +28,33 @@ const initialExercisesState = {
 	},
 };
 
-export const fetchExercisesByTag = createAsyncThunk('exercises/fetchExercisesByTag', async tag => {
-	const exercisesUrl = `${baseExerciseUrl}/exercises`;
-	try {
-		if (tag === 'all') {
-			return await fetchData(exercisesUrl, exerciseOptions);
+export const fetchExercisesByTag = createAsyncThunk(
+	'exercises/fetchExercisesByTag',
+	async tag => {
+		const exercisesUrl = `${baseExerciseUrl}/exercises`;
+		try {
+			if (tag === 'all') {
+				return await fetchData(exercisesUrl, exerciseOptions);
+			}
+			return await fetchData(
+				`${exercisesUrl}/bodyPart/${tag}`,
+				exerciseOptions,
+			);
+		} catch (error) {
+			throw error;
 		}
-		return await fetchData(`${exercisesUrl}/bodyPart/${tag}`, exerciseOptions);
-	} catch (error) {
-		throw error;
-	}
-});
+	},
+);
 
 export const fetchExercisesByName = createAsyncThunk(
 	'exercises/fetchExercisesByName',
 	async name => {
 		const exercisesUrl = `${baseExerciseUrl}/exercises`;
 		try {
-			const exercisesData = await fetchData(exercisesUrl, exerciseOptions);
+			const exercisesData = await fetchData(
+				exercisesUrl,
+				exerciseOptions,
+			);
 			const searchedExercises = exercisesData.filter(
 				exercise =>
 					exercise.name.toLowerCase().includes(name) ||
@@ -77,24 +93,30 @@ export const fetchExercisesByEquiment = createAsyncThunk(
 	},
 );
 
-export const fetchExerciseById = createAsyncThunk('exercises/fetchExerciseById', async id => {
-	const exerciseDetailUrl = `${baseExerciseUrl}/exercises/exercise/${id}`;
-	try {
-		return await fetchData(exerciseDetailUrl, exerciseOptions);
-	} catch (error) {
-		throw error;
-	}
-});
+export const fetchExerciseById = createAsyncThunk(
+	'exercises/fetchExerciseById',
+	async id => {
+		const exerciseDetailUrl = `${baseExerciseUrl}/exercises/exercise/${id}`;
+		try {
+			return await fetchData(exerciseDetailUrl, exerciseOptions);
+		} catch (error) {
+			throw error;
+		}
+	},
+);
 
-export const fetchTagList = createAsyncThunk('exercises/fetchTagList', async () => {
-	const tagListUrl = `${baseExerciseUrl}/exercises/bodyPartList`;
-	try {
-		const tagList = await fetchData(tagListUrl, exerciseOptions);
-		return ['all', ...tagList];
-	} catch (error) {
-		throw error;
-	}
-});
+export const fetchTagList = createAsyncThunk(
+	'exercises/fetchTagList',
+	async () => {
+		const tagListUrl = `${baseExerciseUrl}/exercises/bodyPartList`;
+		try {
+			const tagList = await fetchData(tagListUrl, exerciseOptions);
+			return ['all', ...tagList];
+		} catch (error) {
+			throw error;
+		}
+	},
+);
 
 export const exerciseSlice = createSlice({
 	name: 'exercises',
@@ -162,20 +184,20 @@ export const exerciseSlice = createSlice({
 			state.selectedExercise = action.payload;
 		},
 		[fetchExerciseById.rejected]: (state, action) => {
-			state.loading = false;
+			state.loading.exerciseLoading = false;
 			state.error.exerciseError = action.error.message;
 		},
 
 		// fetchTagList
 		[fetchTagList.pending]: (state, _) => {
-			state.loading.exerciseLoading = true;
+			state.loading.tagListLoading = true;
 		},
 		[fetchTagList.fulfilled]: (state, action) => {
-			state.loading.exerciseLoading = false;
+			state.loading.tagListLoading = false;
 			state.tagList = action.payload;
 		},
 		[fetchTagList.rejected]: (state, action) => {
-			state.loading = false;
+			state.loading.tagListLoading = false;
 			state.error.exerciseError = action.error.message;
 		},
 	},
