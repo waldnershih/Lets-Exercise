@@ -10,7 +10,11 @@ const LeftArrow = () => {
 	const { isFirstItemVisible, scrollPrev } = useContext(VisibilityContext);
 
 	return (
-		<div disabled={isFirstItemVisible} onClick={() => scrollPrev()} className="left-arrow">
+		<div
+			disabled={isFirstItemVisible}
+			onClick={() => scrollPrev()}
+			className="left-arrow"
+		>
 			<IoIosArrowBack />
 		</div>
 	);
@@ -19,7 +23,11 @@ const LeftArrow = () => {
 const RightArrow = () => {
 	const { isLastItemVisible, scrollNext } = useContext(VisibilityContext);
 	return (
-		<div disabled={isLastItemVisible} onClick={() => scrollNext()} className="right-arrow">
+		<div
+			disabled={isLastItemVisible}
+			onClick={() => scrollNext()}
+			className="right-arrow"
+		>
 			<IoIosArrowForward />
 		</div>
 	);
@@ -33,9 +41,17 @@ const HorizontalScrollbar = ({ items }) => {
 			className="app__horizontal-scrollbar"
 		>
 			{items.map(item => (
-				<Link key={`${item.name}-${item.id}`} to={`/exercisedetail/${item.id}`}>
-					<Card exercise={item} itemID={`${item.name}-${item.id}`} />
-				</Link>
+				<div
+					style={{ margin: '20px 20px' }}
+					key={`${item.name}-${item.id}`}
+				>
+					<Link to={`/exercisedetail/${item.id}`}>
+						<Card
+							exercise={item}
+							itemID={`${item.name}-${item.id}`}
+						/>
+					</Link>
+				</div>
 			))}
 		</ScrollMenu>
 	);

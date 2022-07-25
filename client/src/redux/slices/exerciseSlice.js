@@ -31,7 +31,7 @@ const initialExercisesState = {
 export const fetchExercisesByTag = createAsyncThunk(
 	'exercises/fetchExercisesByTag',
 	async tag => {
-		const exercisesUrl = `${baseExerciseUrl}/exercises`;
+		const exercisesUrl = `${baseExerciseUrl}`;
 		try {
 			if (tag === 'all') {
 				return await fetchData(exercisesUrl, exerciseOptions);
@@ -49,7 +49,7 @@ export const fetchExercisesByTag = createAsyncThunk(
 export const fetchExercisesByName = createAsyncThunk(
 	'exercises/fetchExercisesByName',
 	async name => {
-		const exercisesUrl = `${baseExerciseUrl}/exercises`;
+		const exercisesUrl = `${baseExerciseUrl}`;
 		try {
 			const exercisesData = await fetchData(
 				exercisesUrl,
@@ -72,7 +72,7 @@ export const fetchExercisesByName = createAsyncThunk(
 export const fetchExercisesByTargetMuscle = createAsyncThunk(
 	'exercises/fetchExercisesByTargetMuscle',
 	async target => {
-		const targetMuscleExerciseUrl = `${baseExerciseUrl}/exercises/target/${target}`;
+		const targetMuscleExerciseUrl = `${baseExerciseUrl}/target/${target}`;
 		try {
 			return await fetchData(targetMuscleExerciseUrl, exerciseOptions);
 		} catch (error) {
@@ -84,7 +84,7 @@ export const fetchExercisesByTargetMuscle = createAsyncThunk(
 export const fetchExercisesByEquiment = createAsyncThunk(
 	'exercises/fetchExercisesByEquiment',
 	async equipment => {
-		const equimentExercisesUrl = `${baseExerciseUrl}/exercises/equipment/${equipment}`;
+		const equimentExercisesUrl = `${baseExerciseUrl}/equipment/${equipment}`;
 		try {
 			return await fetchData(equimentExercisesUrl, exerciseOptions);
 		} catch (error) {
@@ -96,7 +96,7 @@ export const fetchExercisesByEquiment = createAsyncThunk(
 export const fetchExerciseById = createAsyncThunk(
 	'exercises/fetchExerciseById',
 	async id => {
-		const exerciseDetailUrl = `${baseExerciseUrl}/exercises/exercise/${id}`;
+		const exerciseDetailUrl = `${baseExerciseUrl}/exercise/${id}`;
 		try {
 			return await fetchData(exerciseDetailUrl, exerciseOptions);
 		} catch (error) {
@@ -108,7 +108,7 @@ export const fetchExerciseById = createAsyncThunk(
 export const fetchTagList = createAsyncThunk(
 	'exercises/fetchTagList',
 	async () => {
-		const tagListUrl = `${baseExerciseUrl}/exercises/bodyPartList`;
+		const tagListUrl = `${baseExerciseUrl}/bodyPartList`;
 		try {
 			const tagList = await fetchData(tagListUrl, exerciseOptions);
 			return ['all', ...tagList];

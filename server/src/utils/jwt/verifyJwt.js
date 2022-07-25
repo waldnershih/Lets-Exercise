@@ -1,5 +1,5 @@
 const passport = require('passport');
 
-const varifyJwt = passport.authenticate('jwt', { session: false });
+const verifyJwt = passport.authenticate('jwt', { session: false });
 
-module.exports = varifyJwt;
+module.exports = verifyJwt;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaHeart } from 'react-icons/fa';
-import './Card.scss';
+import './BasicCard.scss';
 
-const Card = ({ exercise }) => {
+const BasicCard = ({ exercise }) => {
 	const { bodyPart, gifUrl, name } = exercise;
 	return (
 		<div className="app__card">
@@ -24,4 +24,4 @@ const Card = ({ exercise }) => {
 	);
 };
 
-export default Card;
+export default BasicCard;

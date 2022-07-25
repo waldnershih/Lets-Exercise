@@ -8,7 +8,14 @@ const {
 	deleteUserById,
 } = require('../models/services/users');
 
+/**
+ *
+ * @param {body:{email,password}} req
+ * @param {*} res
+ * @param {*} next
+ */
 async function httpLoginUser(req, res, next) {
+	console.log(req.body);
 	passport.authenticate('local', { session: false }, (err, user, info) => {
 		if (err) {
 			console.log(err);
@@ -18,6 +25,7 @@ async function httpLoginUser(req, res, next) {
 		if (!user) {
 			return next(FAILED_TO_LOGIN);
 		}
+
 		try {
 			const jwt = issueJWT(user);
 			return res.status(200).send({
@@ -31,8 +39,16 @@ async function httpLoginUser(req, res, next) {
 	})(req, res, next);
 }
 
+/**
+ *
+ * @param {body:{name,email,password}} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
 async function httpRegisterUser(req, res, next) {
 	const { name, email, password } = req.body;
+	console.log(req.body);
 
 	if (!name || !email || !password) {
 		return next(FIELD_MISSING);
@@ -52,7 +68,7 @@ async function httpRegisterUser(req, res, next) {
 }
 
 async function httpGetUserById(req, res, next) {
-	const { id } = req.params;
+	const { _id: id } = req.user;
 	try {
 		const user = await getUserById(id);
 		res.status(200).send(user);
@@ -63,7 +79,7 @@ async function httpGetUserById(req, res, next) {
 
 // ToDo: unable to update password
 async function httpUpdateUserById(req, res, next) {
-	const { id } = req.params;
+	const { _id: id } = req.user;
 	const { email, password } = req.body;
 
 	if (!email && !password) {
@@ -79,8 +95,7 @@ async function httpUpdateUserById(req, res, next) {
 }
 
 async function httpDeleteUserById(req, res, next) {
-	const { id } = req.params;
-	// const {_id} = req.user;
+	const { _id: id } = req.user;
 
 	try {
 		const deletedUserId = await deleteUserById(id);

@@ -6,10 +6,10 @@
 	--font-title: 'Playfair Display', serif;
 
 	--primary-color: #fff9f9;
-	--secondary-color: #1c75eb;
+	--secondary-color: #46448d;
 	--secondary-color-20: rgba(28, 117, 235, 10%);
 	--black-color: #3a3a3a;
-	--gray-color: #808080;
+	--gray-color: #c7c7c7;
 	--brown-color: #746179;
 	--white-color: #ffffff;
 	--snow-color: #fffef9;
@@ -75,9 +75,29 @@ svg:hover {
 
 input {
 	border-color: none;
-	border: 1px solid var(--gray-color);
+	border: 1px solid var(--lightGray-color);
+	padding: 4px 8px;
+	border-radius: 4px;
+}
+
+input:focus {
+	/* border-color: var(--secondary-color); */
+	outline: none;
+	border: 1px solid var(--secondary-color);
+	box-shadow: 0 0 2px var(--secondary-color);
+}
+
+button {
+	border-radius: 4px;
+	border: none;
 }
 
 a {
 	text-decoration: none;
+	color: var(--black-color);
+}
+
+a:hover {
+	/* text-decoration: underline; */
+	color: var(--secondary-color);
 }

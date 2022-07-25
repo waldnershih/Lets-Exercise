@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchData, youtubeOptions, baseVideoUrl, videoParams } from '../../apis';
+import {
+	fetchData,
+	youtubeOptions,
+	baseVideoUrl,
+	videoParams,
+} from '../../apis';
 
 const initialVideoState = {
 	videos: [],
@@ -7,16 +12,19 @@ const initialVideoState = {
 	error: '',
 };
 
-export const fetchVideosByTerm = createAsyncThunk('videos/fetchVideosByTerm', async term => {
-	videoParams.q = term;
-	baseVideoUrl.search = new URLSearchParams(videoParams).toString();
-	try {
-		const response = await fetchData(baseVideoUrl, youtubeOptions);
-		return response.items;
-	} catch (error) {
-		throw error;
-	}
-});
+export const fetchVideosByTerm = createAsyncThunk(
+	'videos/fetchVideosByTerm',
+	async term => {
+		videoParams.q = term;
+		baseVideoUrl.search = new URLSearchParams(videoParams).toString();
+		try {
+			const response = await fetchData(baseVideoUrl, youtubeOptions);
+			return response.items;
+		} catch (error) {
+			throw error;
+		}
+	},
+);
 
 export const videoSlice = createSlice({
 	name: 'videos',

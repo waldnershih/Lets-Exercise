@@ -8,14 +8,11 @@
 // 	},
 // };
 
-export const baseExerciseUrl = 'http://localhost:8000/v1';
+export const baseExerciseUrl = 'http://localhost:8000/v1/exercises';
 export const exerciseOptions = {
-	method: 'GET',
-	// headers: {
-	// 	// 'Content-Type': 'application/json',
-	// 	// 'Access-Control-Allow-Origin': '*',
-	// 	// 'Access-Control-Allow-Headers':
-	// 	// 	'Origin, X-Requested-With, Content-Type, Accept',
-	// 	// Authorization: 'Bearer ' + localStorage.getItem('token'),
-	// },
+	headers: {
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Headers':
+			'Origin, X-Requested-With, Content-Type, Accept',
+	},
 };

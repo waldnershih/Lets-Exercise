@@ -5,18 +5,22 @@ import {
 	fetchExercisesByTag,
 	fetchExercisesByName,
 } from '../../redux/slices/exerciseSlice';
+import { logoutUser } from '../../redux/slices/userSlice';
 import { HiMenuAlt4 } from 'react-icons/hi';
 import { FaHeart } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { Avatar, Logo } from '../../assets';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
+import { BasicMenu } from '../../components';
 import './Header.scss';
 
 export const Navbar = ({ setIsSidebarOpen }) => {
+	// console.log(isAuth);
 	const dispatch = useDispatch();
 	const [searchValue, setSearchValue] = useState('');
+	const [anchorEl, setAnchorEl] = useState(null);
+	const { isAuth } = useSelector(state => state.isAuth);
 	const location = useLocation();
 
 	const handleOnChange = e => {
@@ -32,6 +36,18 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 		setSearchValue('');
 	};
 
+	const handleLogout = () => {
+		dispatch(logoutUser());
+		setAnchorEl(null);
+	};
+
+	const menuItems = [
+		{
+			label: 'Logout',
+			handleOnClick: handleLogout,
+		},
+	];
+
 	return (
 		<div className="navbar">
 			<div className="navbar__left-container">
@@ -45,10 +61,17 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 
 			<div className="navbar__middle-container">
 				{location.pathname === '/' && (
-					<input type="text" value={searchValue} onChange={handleOnChange} />
+					<input
+						type="text"
+						value={searchValue}
+						onChange={handleOnChange}
+					/>
 				)}
 				{location.pathname === '/' && (
-					<div className="search-container" onClick={handleOnSearchClick}>
+					<div
+						className="search-container"
+						onClick={handleOnSearchClick}
+					>
 						<FiSearch />
 					</div>
 				)}
@@ -56,8 +79,20 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 
 			<div className="navbar__right-container">
 				<FaHeart />
-				<div>
-					<img src={Avatar} alt="Avatar" />
+				<div className="login-register-avatar">
+					{isAuth ? (
+						<BasicMenu
+							items={menuItems}
+							anchorEl={anchorEl}
+							setAnchorEl={setAnchorEl}
+						>
+							<img src={Avatar} alt="Avatar" />
+						</BasicMenu>
+					) : (
+						<Link to="/signin" state={{ from: location }}>
+							Login
+						</Link>
+					)}
 				</div>
 			</div>
 		</div>
@@ -79,7 +114,11 @@ export const Tagbar = () => {
 	return (
 		<div className="tagbar">
 			{tags.map(tag => (
-				<div key={tag} className="tagbar__container" onClick={() => handleOnTagClick(tag)}>
+				<div
+					key={tag}
+					className="tagbar__container"
+					onClick={() => handleOnTagClick(tag)}
+				>
 					<p className="p-text-16">{tag}</p>
 				</div>
 			))}
