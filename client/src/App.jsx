@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Home, ExerciseDetail, NotFound, Signin, Signup } from './pages';
+import {
+	Home,
+	LoveExercises,
+	ExerciseDetail,
+	NotFound,
+	Signin,
+	Signup,
+} from './pages';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { Footer, Header, Sidebar } from './components';
+import { Footer, Header, Sidebar, Protected } from './components';
 import { useLocation } from 'react-router-dom';
 import { setIsAuth } from './redux/slices/isAuthSlice';
 import { fetchUserProfile } from './redux/slices/userSlice';
@@ -10,7 +17,7 @@ import { fetchUserProfile } from './redux/slices/userSlice';
 import './App.scss';
 import { clearUser } from './utils';
 
-const whiteList = ['/signin', '/signup', '/404'];
+const blacklist = ['/signin', '/signup', '/404'];
 
 const App = () => {
 	const location = useLocation();
@@ -40,7 +47,7 @@ const App = () => {
 
 	return (
 		<div className="app">
-			{!whiteList.includes(location.pathname) && (
+			{!blacklist.includes(location.pathname) && (
 				<Header setIsSidebarOpen={setIsSidebarOpen} />
 			)}
 			{
@@ -51,6 +58,17 @@ const App = () => {
 			}
 			<Routes>
 				<Route path="/" exact element={<Home />} />
+				{/* protect route */}
+
+				<Route
+					path="/profile/loveexercises"
+					element={
+						<Protected>
+							<LoveExercises />
+						</Protected>
+					}
+				/>
+
 				<Route
 					path="/exercisedetail/:id"
 					exact
@@ -61,7 +79,7 @@ const App = () => {
 				<Route path="/404" exact element={<NotFound />} />
 				<Route path="*" element={<Navigate replace to="/404" />} />
 			</Routes>
-			{!whiteList.includes(location.pathname) && <Footer />}
+			{!blacklist.includes(location.pathname) && <Footer />}
 		</div>
 	);
 };

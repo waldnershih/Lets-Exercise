@@ -1,6 +1,10 @@
 const passport = require('passport');
 const { issueJWT } = require('../utils/jwt');
-const { FIELD_MISSING, FAILED_TO_LOGIN } = require('../utils/error');
+const {
+	FIELD_MISSING,
+	FAILED_TO_LOGIN,
+	BAD_REQUEST,
+} = require('../utils/error');
 const {
 	registerUser,
 	getUserById,
@@ -78,20 +82,45 @@ async function httpGetUserById(req, res, next) {
 }
 
 // ToDo: unable to update password
+/**
+ *
+ * @param {body:{email, password, loveExercises, field}} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
 async function httpUpdateUserById(req, res, next) {
 	const { _id: id } = req.user;
-	const { email, password } = req.body;
+	const { email, password, loveExercise, field } = req.body;
 
-	if (!email && !password) {
-		return next(FIELD_MISSING);
+	if (!field) return next(FIELD_MISSING);
+
+	if (field === 'password' || field === 'email') {
+		if (!email && !password) {
+			return next(FIELD_MISSING);
+		}
+
+		try {
+			const updatedUser = await updateUserById(id, { email, password });
+			return res.status(200).send(updatedUser);
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	try {
-		const updatedUser = await updateUserById(id, { email, password });
-		res.status(200).send(updatedUser);
-	} catch (err) {
-		return next(err);
+	if (field === 'addLoveExercise' || field === 'removeLoveExercise') {
+		try {
+			const updatedUser = await updateUserById(id, {
+				loveExercise,
+				field,
+			});
+			return res.status(200).send(updatedUser);
+		} catch (err) {
+			return next(err);
+		}
 	}
+
+	return next(BAD_REQUEST);
 }
 
 async function httpDeleteUserById(req, res, next) {

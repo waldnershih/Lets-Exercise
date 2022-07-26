@@ -139,8 +139,9 @@ export const userSlice = createSlice({
 		},
 		[logoutUser.fulfilled]: (state, action) => {
 			// state.userProfile = action.payload;
-			state.userToken = localStorage.getItem('token');
 			state.loading = false;
+			state.userProfile = null;
+			state.userToken = '';
 			state.error = '';
 		},
 		[logoutUser.rejected]: (state, action) => {
@@ -183,15 +184,17 @@ export const userSlice = createSlice({
 		// patch user by id
 		[patchUserProfile.pending]: (state, _) => {
 			state.loading = true;
+			state.success = false;
 		},
 		[patchUserProfile.fulfilled]: (state, action) => {
 			state.userProfile = action.payload;
 			state.loading = false;
-
+			state.success = true;
 			state.error = '';
 		},
 		[patchUserProfile.rejected]: (state, action) => {
 			state.error = action.error;
+			state.success = false;
 			state.loading = false;
 		},
 		// delete user by id

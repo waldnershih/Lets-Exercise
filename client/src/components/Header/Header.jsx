@@ -10,10 +10,11 @@ import { HiMenuAlt4 } from 'react-icons/hi';
 import { FaHeart } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { Avatar, Logo } from '../../assets';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BasicMenu } from '../../components';
 import './Header.scss';
+
+const whitelist = ['/', '/profile/loveexercises'];
 
 export const Navbar = ({ setIsSidebarOpen }) => {
 	// console.log(isAuth);
@@ -34,6 +35,10 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 	const handleOnSearchClick = () => {
 		dispatch(fetchExercisesByName(searchValue));
 		setSearchValue('');
+	};
+
+	const handleOnProfileClick = e => {
+		setAnchorEl(e.currentTarget);
 	};
 
 	const handleLogout = () => {
@@ -60,14 +65,14 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 			</div>
 
 			<div className="navbar__middle-container">
-				{location.pathname === '/' && (
+				{whitelist.includes(location.pathname) && (
 					<input
 						type="text"
 						value={searchValue}
 						onChange={handleOnChange}
 					/>
 				)}
-				{location.pathname === '/' && (
+				{whitelist.includes(location.pathname) && (
 					<div
 						className="search-container"
 						onClick={handleOnSearchClick}
@@ -78,7 +83,12 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 			</div>
 
 			<div className="navbar__right-container">
-				<FaHeart />
+				{isAuth && (
+					<Link to="/profile/loveexercises">
+						<FaHeart />
+					</Link>
+				)}
+
 				<div className="login-register-avatar">
 					{isAuth ? (
 						<BasicMenu
@@ -86,7 +96,11 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 							anchorEl={anchorEl}
 							setAnchorEl={setAnchorEl}
 						>
-							<img src={Avatar} alt="Avatar" />
+							<img
+								src={Avatar}
+								alt="Avatar"
+								onClick={handleOnProfileClick}
+							/>
 						</BasicMenu>
 					) : (
 						<Link to="/signin" state={{ from: location }}>
@@ -136,8 +150,8 @@ const Header = ({ setIsSidebarOpen }) => {
 		<div className="app__header">
 			<Navbar setIsSidebarOpen={setIsSidebarOpen} />
 			<Divider />
-			{location.pathname === '/' && <Tagbar />}
-			{location.pathname === '/' && <Divider />}
+			{whitelist.includes(location.pathname) && <Tagbar />}
+			{whitelist.includes(location.pathname) && <Divider />}
 		</div>
 	);
 };

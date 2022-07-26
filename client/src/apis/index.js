@@ -9,6 +9,8 @@ const fetchData = async (url, options) => {
 
 	if (token) {
 		options.headers.Authorization = `${token}`;
+	} else {
+		delete options.headers.Authorization;
 	}
 
 	try {
@@ -29,6 +31,8 @@ const postData = async (url, options) => {
 	const token = localStorage.getItem('token');
 	if (token) {
 		options.headers.Authorization = `${token}`;
+	} else {
+		delete options.headers.Authorization;
 	}
 
 	try {
@@ -49,6 +53,8 @@ const putData = async (url, options) => {
 	const token = localStorage.getItem('token');
 	if (token) {
 		options.headers.Authorization = `${token}`;
+	} else {
+		delete options.headers.Authorization;
 	}
 
 	try {
@@ -69,6 +75,8 @@ const patchData = async (url, options) => {
 	const token = localStorage.getItem('token');
 	if (token) {
 		options.headers.Authorization = `${token}`;
+	} else {
+		delete options.headers.Authorization;
 	}
 
 	try {

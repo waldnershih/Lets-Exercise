@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 const reviewsModel = require('./reviews');
+const uniqueArrayPlugin = require('mongoose-unique-array');
 
 const Schema = mongoose.Schema;
 
@@ -17,8 +18,9 @@ const UserSchema = new Schema({
 	},
 	loveExercises: [
 		{
-			bodyPart: String,
-			exercises: { type: Schema.Types.ObjectId, ref: 'exercises' },
+			type: Schema.Types.ObjectId,
+			ref: 'exercises',
+			// unique: true,
 		},
 	],
 });
@@ -37,5 +39,6 @@ UserSchema.post('findOneAndDelete', async doc => {
 });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+UserSchema.plugin(uniqueArrayPlugin);
 
 module.exports = mongoose.model('users', UserSchema);

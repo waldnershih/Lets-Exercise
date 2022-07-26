@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { BasicCard } from '../../components/';
+import React, { useEffect, useState } from 'react';
+import { BasicCard } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
 	fetchTagList,
 } from '../../redux/slices/exerciseSlice';
 
-import './Home.scss';
+import './LoveExercises.scss';
 
-const Home = () => {
-	const { exercises, loading } = useSelector(state => state.exercises);
-	const { isAuth } = useSelector(state => state.isAuth);
-	const { userProfile } = useSelector(state => state.user);
-	const [unSaveExercise, setUnSaveExercise] = useState(exercises);
+const LoveExercises = () => {
 	const dispatch = useDispatch();
+	const { exercises, loading } = useSelector(state => state.exercises);
+	const { userProfile } = useSelector(state => state.user);
+	const { isAuth } = useSelector(state => state.isAuth);
+	const [loveExercises, setLoveExercises] = useState([]);
 
 	useEffect(() => {
 		if (!exercises.length > 0) {
@@ -26,17 +26,17 @@ const Home = () => {
 
 	useEffect(() => {
 		if (userProfile) {
-			const userUnsaveExercises = exercises.filter(
-				exercise => !userProfile.loveExercises.includes(exercise._id),
+			const userLoveExercises = exercises.filter(exercise =>
+				userProfile.loveExercises.includes(exercise._id),
 			);
-			setUnSaveExercise(userUnsaveExercises);
-		} else {
-			setUnSaveExercise(exercises);
+			setLoveExercises(userLoveExercises);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userProfile, exercises.length]);
 
-	const renderCard = unSaveExercise
+	// console.log(loveExercises);
+
+	const renderCard = loveExercises
 		.slice(0, 8)
 		.map(exercise => (
 			<BasicCard
@@ -50,9 +50,11 @@ const Home = () => {
 	return (
 		<div className="app__container">
 			{!loading.exerciseLoading ? (
-				<div className="app__section app__home">{renderCard}</div>
+				<div className="app__section app__love-exercise">
+					{renderCard}
+				</div>
 			) : (
-				<div className="app__section app__home">
+				<div className="app__section app__love-exercise">
 					<h2 className="subHead-text">Loading...</h2>
 				</div>
 			)}
@@ -60,4 +62,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default LoveExercises;

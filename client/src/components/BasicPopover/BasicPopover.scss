@@ -1,0 +1,24 @@
+.warning-container {
+	padding: 5px 10px;
+	p {
+		padding: 5px 10px;
+	}
+	.option-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+		p:first-child {
+			margin-right: 20px;
+		}
+		p {
+			border-radius: 4px;
+			color: var(--secondary-color);
+			&:hover {
+				cursor: pointer;
+
+				background-color: var(--secondary-color-20);
+			}
+		}
+	}
+}

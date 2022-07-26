@@ -7,6 +7,8 @@ import Video from './Video/Video';
 import HorizontalScrollbar from './HorizontalScrollbar/HorizontalScrollbar';
 import Loader from './Loader/Loader';
 import BasicMenu from './BasicMenu/BasicMenu';
+import BasicPopover from './BasicPopover/BasicPopover';
+import Protected from './Protected/Protected';
 
 export {
 	Header,
@@ -18,4 +20,6 @@ export {
 	HorizontalScrollbar,
 	Loader,
 	BasicMenu,
+	BasicPopover,
+	Protected,
 };
