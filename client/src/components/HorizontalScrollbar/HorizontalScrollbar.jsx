@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { Card } from '../index';
+import { BasicCard } from '../index';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import './HorizontalScrollbar.scss';
 
@@ -34,6 +34,7 @@ const RightArrow = () => {
 };
 
 const HorizontalScrollbar = ({ items }) => {
+	const { isAuth } = useSelector(state => state.isAuth);
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
@@ -41,16 +42,13 @@ const HorizontalScrollbar = ({ items }) => {
 			className="app__horizontal-scrollbar"
 		>
 			{items.map(item => (
-				<div
-					style={{ margin: '20px 20px' }}
-					key={`${item.name}-${item.id}`}
-				>
-					<Link to={`/exercisedetail/${item.id}`}>
-						<Card
-							exercise={item}
-							itemID={`${item.name}-${item.id}`}
-						/>
-					</Link>
+				<div key={`${item.name}-${item.id}`}>
+					<BasicCard
+						exercise={item}
+						itemID={`${item.name}-${item.id}`}
+						detailLink={`/exercisedetail/${item.id}`}
+						isAuth={isAuth}
+					/>
 				</div>
 			))}
 		</ScrollMenu>

@@ -34,7 +34,7 @@ const App = () => {
 	}, [isAuth]);
 
 	useEffect(() => {
-		console.log(userProfile?._id);
+		console.log(userProfile);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userProfile?._id]);
 
@@ -43,7 +43,12 @@ const App = () => {
 			{!whiteList.includes(location.pathname) && (
 				<Header setIsSidebarOpen={setIsSidebarOpen} />
 			)}
-			{isSidebarOpen && <Sidebar setIsSidebarOpen={setIsSidebarOpen} />}
+			{
+				<Sidebar
+					isSidebarOpen={isSidebarOpen}
+					setIsSidebarOpen={setIsSidebarOpen}
+				/>
+			}
 			<Routes>
 				<Route path="/" exact element={<Home />} />
 				<Route

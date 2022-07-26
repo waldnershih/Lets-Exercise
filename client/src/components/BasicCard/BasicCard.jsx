@@ -1,9 +1,26 @@
-import React from 'react';
-import { FaHeart } from 'react-icons/fa';
+import React, { useState } from 'react';
+// import { FaHeart } from 'react-icons/fa';
 import './BasicCard.scss';
+import { Link } from 'react-router-dom';
 
-const BasicCard = ({ exercise }) => {
+const BasicCard = ({ exercise, detailLink, isAuth }) => {
 	const { bodyPart, gifUrl, name } = exercise;
+	const [isSave, setIsSave] = useState(false);
+
+	const handleOnSave = () => {
+		if (isAuth) {
+			console.log('Saved!');
+			setIsSave(true);
+		} else {
+			console.log('Please login to save!');
+		}
+	};
+
+	const handleOnUnsave = () => {
+		console.log('Unsaved!');
+		setIsSave(false);
+	};
+
 	return (
 		<div className="app__card">
 			<div className="image-container">
@@ -17,9 +34,26 @@ const BasicCard = ({ exercise }) => {
 					<p className="caption-text">{target}</p>
 				</div> */}
 
-				<FaHeart />
+				{/* <FaHeart /> */}
 			</div>
 			<p className="p-text-18">{name}</p>
+			<div className="action-container">
+				{isSave ? (
+					<p className="p-text-16" onClick={handleOnUnsave}>
+						Unsave
+					</p>
+				) : (
+					<p className="p-text-16" onClick={handleOnSave}>
+						Save
+					</p>
+				)}
+
+				{detailLink && (
+					<Link to={detailLink}>
+						<p className="p-text-16">Detail</p>
+					</Link>
+				)}
+			</div>
 		</div>
 	);
 };

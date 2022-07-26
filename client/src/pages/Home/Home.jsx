@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card } from '../../components/';
-import { Link } from 'react-router-dom';
+import { BasicCard } from '../../components/';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
@@ -11,6 +10,7 @@ import './Home.scss';
 
 const Home = () => {
 	const { exercises, loading } = useSelector(state => state.exercises);
+	const { isAuth } = useSelector(state => state.isAuth);
 
 	const dispatch = useDispatch();
 
@@ -21,15 +21,16 @@ const Home = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const renderCard = exercises.slice(0, 8).map(exercise => (
-		<Link
-			key={`${exercise.name}-${exercise.id}`}
-			to={`/exercisedetail/${exercise.id}`}
-			style={{ margin: '20px 20px' }}
-		>
-			<Card exercise={exercise} />
-		</Link>
-	));
+	const renderCard = exercises
+		.slice(0, 8)
+		.map(exercise => (
+			<BasicCard
+				key={`${exercise.name}-${exercise.id}`}
+				exercise={exercise}
+				detailLink={`/exercisedetail/${exercise.id}`}
+				isAuth={isAuth}
+			/>
+		));
 
 	return (
 		<div className="app__container">

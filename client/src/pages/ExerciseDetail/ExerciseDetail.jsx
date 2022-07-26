@@ -30,6 +30,7 @@ const ExerciseDetail = () => {
 	} = useSelector(state => state.videos);
 	const dispatch = useDispatch();
 	const { id } = useParams();
+	console.log(id);
 
 	useEffect(() => {
 		dispatch(fetchExerciseById(id));
