@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
 	CardDetails,
 	// Video,
-	HorizontalScrollbar,
+	// HorizontalScrollbar,
 	Loader,
+	HorizontalCard,
 } from '../../components';
+import { Divider } from '../../components/Header/Header';
 import {
 	fetchExercisesByTargetMuscle,
 	fetchExercisesByEquiment,
@@ -17,7 +19,24 @@ import { fetchVideosByTerm } from '../../redux/slices/videoSlice';
 
 import './ExerciseDetail.scss';
 
+const tags = [
+	{
+		name: 'Videos',
+		value: 'recommendedVideos',
+	},
+	{
+		name: 'Target Muscle',
+		value: 'similarTargetMuscleExercises',
+	},
+	{
+		name: 'Equipment',
+		value: 'similarEquipmentExercises',
+	},
+];
+
 const ExerciseDetail = () => {
+	const dispatch = useDispatch();
+	const { id } = useParams();
 	const {
 		selectedExercise,
 		targetMuscleExercises,
@@ -28,8 +47,9 @@ const ExerciseDetail = () => {
 		// videos,
 		loading: videoLoading,
 	} = useSelector(state => state.videos);
-	const dispatch = useDispatch();
-	const { id } = useParams();
+	const { isAuth } = useSelector(state => state.isAuth);
+	const [selectedTag, setSelectedTag] = useState(tags[0].value);
+	const [commentValue, setCommentValue] = useState('');
 
 	useEffect(() => {
 		dispatch(fetchExerciseById(id));
@@ -50,28 +70,114 @@ const ExerciseDetail = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedExercise]);
 
+	const handleOnTagClick = tag => {
+		setSelectedTag(tag.value);
+	};
+
+	const handleOnCommentClick = () => {
+		console.log(commentValue);
+	};
+
 	// const renderVideos =
 	// 	videos &&
 	// 	videos.map((video, i) => (
 	// 		<Video key={`${video.id.videoId}-${i}`} video={video} />
 	// 	));
 
+	const renderTargetMuscleExercises =
+		targetMuscleExercises &&
+		targetMuscleExercises
+			.slice(0, 11)
+			.map((exercise, i) => (
+				<HorizontalCard
+					key={`${exercise.id}-${i}`}
+					exercise={exercise}
+					detailLink={`/exercisedetail/${exercise.id}`}
+					isAuth={isAuth}
+				/>
+			));
+
+	const renderEquipmentExercises =
+		equipmentExercises &&
+		equipmentExercises
+			.slice(0, 11)
+			.map((exercise, i) => (
+				<HorizontalCard
+					key={`${exercise.id}-${i}`}
+					exercise={exercise}
+					detailLink={`/exercisedetail/${exercise.id}`}
+					isAuth={isAuth}
+				/>
+			));
+
 	return (
 		<div className="app__container">
 			<div className="app__section app__exercise-detail">
 				<div className="detail-container">
-					<CardDetails
-						className="card-detail-container"
-						data={selectedExercise}
-					/>
-					{!videoLoading ? (
-						// <div className="video-container">{renderVideos}</div>
-						<Loader flex={1} />
-					) : (
-						<Loader flex={1} />
-					)}
+					<div className="card-detail-container">
+						<CardDetails data={selectedExercise} />
+						<Divider />
+						<h2 className="subHead-text">{0} Comment</h2>
+						<div className="card-detail-container__comment-container">
+							<textarea
+								name="comment"
+								id=""
+								rows="4"
+								placeholder="Comment"
+								value={commentValue}
+								onChange={e => setCommentValue(e.target.value)}
+							/>
+							<div className="card-detail-container__comment-container__action-container">
+								<div onClick={() => setCommentValue('')}>
+									Clear
+								</div>
+								<div onClick={handleOnCommentClick}>
+									Comment
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div className="video-container">
+						<div className="tag-container">
+							{tags.map(tag => (
+								<div
+									key={tag.value}
+									className={`tag-container__tag-box ${
+										selectedTag === tag.value
+											? 'app--darkskinbg'
+											: 'app--skinbg'
+									}`}
+									onClick={() => handleOnTagClick(tag)}
+								>
+									<p className="p-text-16">{tag.name}</p>
+								</div>
+							))}
+						</div>
+						{selectedTag === 'recommendedVideos' &&
+							(!videoLoading ? (
+								// <div className="video-container">
+								// 	{renderVideos}
+								// </div>
+								<Loader flex={1} />
+							) : (
+								<Loader flex={1} />
+							))}
+						{selectedTag === 'similarTargetMuscleExercises' &&
+							(!exerciseLoading.targetMuscleloading ? (
+								renderTargetMuscleExercises
+							) : (
+								<Loader flex={1} />
+							))}
+						{selectedTag === 'similarEquipmentExercises' &&
+							(!exerciseLoading.equipmentLoading ? (
+								renderEquipmentExercises
+							) : (
+								<Loader flex={1} />
+							))}
+					</div>
 				</div>
-				<div className="horizontal-scrollbar-container">
+				{/* <div className="horizontal-scrollbar-container">
 					<h2 className="subHead-text">
 						Similar Target Muscle Exercises
 					</h2>
@@ -100,10 +206,6 @@ const ExerciseDetail = () => {
 					) : (
 						<Loader />
 					)}
-				</div>
-				{/* <div className="HorizontalScrollbar-container">
-					<h2>i am 1</h2>
-					<HorizontalScrollbar />
 				</div> */}
 			</div>
 		</div>

@@ -3,17 +3,19 @@
 	align-items: center;
 	margin: 20px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	h2 {
+	border-radius: 12px;
+	p {
 		text-align: left;
 		margin-left: 15px;
 	}
 	img {
 		object-fit: cover;
-		width: 300px;
+		width: 200px;
+		border-radius: 12px 0 0 12px;
 	}
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.5);
-		h2 {
+		p {
 			color: var(--snow-color);
 		}
 	}

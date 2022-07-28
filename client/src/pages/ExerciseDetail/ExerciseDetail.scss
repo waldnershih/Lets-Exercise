@@ -23,10 +23,63 @@
 
 .card-detail-container {
 	flex: 1;
+	h2 {
+		margin-top: 15px;
+	}
+	.card-detail-container__comment-container {
+		margin: 20px;
+		textarea {
+			width: 100%;
+		}
+		.card-detail-container__comment-container__action-container {
+			display: flex;
+			justify-content: flex-end;
+			margin-top: 16px;
+			div:first-child {
+				margin-right: 30px;
+			}
+			div {
+				padding: 10px 20px;
+				border-radius: 4px;
+				color: var(--secondary-color);
+				opacity: 0.9;
+				&:hover {
+					cursor: pointer;
+					opacity: 1;
+					background-color: var(--secondary-color-20);
+				}
+			}
+		}
+	}
 }
 
 .video-container {
-	flex: 1;
+	flex: 0.5;
+	margin-left: 10px;
+	margin-top: 20px;
+	.tag-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 15px;
+		.tag-container__tag-box {
+			height: 100%;
+			padding: 4px 16px;
+			opacity: 0.9;
+			margin-right: 15px;
+			border-radius: 12px;
+
+			p {
+				text-transform: capitalize;
+			}
+
+			&:hover {
+				cursor: pointer;
+				opacity: 1;
+			}
+		}
+	}
 }
 
 .content {

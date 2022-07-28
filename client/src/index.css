@@ -7,7 +7,9 @@
 
 	--primary-color: #fff9f9;
 	--secondary-color: #46448d;
-	--secondary-color-20: rgba(28, 117, 235, 10%);
+	--secondary-color-20: rgba(70, 68, 141, 10%);
+	/* --secondary-color-20: rgba(28, 117, 235, 10%); */
+	--secondary-color-30: rgba(70, 68, 141, 20%);
 	--black-color: #3a3a3a;
 	--gray-color: #c7c7c7;
 	--brown-color: #746179;
@@ -74,14 +76,19 @@ svg:hover {
 	opacity: 1;
 }
 
-input {
+input,
+textarea {
 	border-color: none;
 	border: 1px solid var(--lightGray-color);
-	padding: 4px 8px;
-	border-radius: 4px;
+	/* padding: 4px 8px; */
+	padding: 10px;
+	border-radius: 2px;
+	color: var(--black-color);
+	font-size: large;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
 	/* border-color: var(--secondary-color); */
 	outline: none;
 	border: 1px solid var(--secondary-color);

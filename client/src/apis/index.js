@@ -2,15 +2,17 @@ import { baseExerciseUrl, exerciseOptions } from './fetchExercise';
 import { baseVideoUrl, youtubeOptions, videoParams } from './fetchYoutubeVideo';
 import { baseUserUrl, userOptions } from './fetchUser';
 
-const fetchData = async (url, options) => {
+const fetchData = async (url, options, type = 'selfServer') => {
 	options.method = 'GET';
 
-	const token = localStorage.getItem('token');
+	if (type === 'selfServer') {
+		const token = localStorage.getItem('token');
 
-	if (token) {
-		options.headers.Authorization = `${token}`;
-	} else {
-		delete options.headers.Authorization;
+		if (token) {
+			options.headers.Authorization = `${token}`;
+		} else {
+			delete options.headers.Authorization;
+		}
 	}
 
 	try {

@@ -17,8 +17,14 @@ export const fetchVideosByTerm = createAsyncThunk(
 	async term => {
 		videoParams.q = term;
 		baseVideoUrl.search = new URLSearchParams(videoParams).toString();
+
 		try {
-			const response = await fetchData(baseVideoUrl, youtubeOptions);
+			const response = await fetchData(
+				baseVideoUrl,
+				youtubeOptions,
+				'videos',
+			);
+
 			return response.items;
 		} catch (error) {
 			throw error;

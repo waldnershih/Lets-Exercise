@@ -9,6 +9,8 @@ import Loader from './Loader/Loader';
 import BasicMenu from './BasicMenu/BasicMenu';
 import BasicPopover from './BasicPopover/BasicPopover';
 import Protected from './Protected/Protected';
+import HorizontalCard from './HorizontalCard/HorizontalCard';
+import Pagination from './Pagination/Pagination';
 
 export {
 	Header,
@@ -22,4 +24,6 @@ export {
 	BasicMenu,
 	BasicPopover,
 	Protected,
+	HorizontalCard,
+	Pagination,
 };

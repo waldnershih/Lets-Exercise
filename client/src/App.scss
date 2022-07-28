@@ -52,6 +52,14 @@
 	background: var(--lightYellow-color);
 }
 
+.app--skinbg {
+	background: var(--skin-color);
+}
+
+.app--darkskinbg {
+	background: var(--darkSkin-color);
+}
+
 .app--primary {
 	color: var(--primary-color);
 }

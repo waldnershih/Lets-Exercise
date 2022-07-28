@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BasicCard } from '../../components';
+import { BasicCard, Pagination } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
@@ -14,6 +14,8 @@ const LoveExercises = () => {
 	const { userProfile } = useSelector(state => state.user);
 	const { isAuth } = useSelector(state => state.isAuth);
 	const [loveExercises, setLoveExercises] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [displayedExercises, setDisplayedExercises] = useState([]);
 
 	useEffect(() => {
 		if (!exercises.length > 0) {
@@ -22,7 +24,7 @@ const LoveExercises = () => {
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [exercises.length]);
+	}, []);
 
 	useEffect(() => {
 		if (userProfile) {
@@ -34,24 +36,41 @@ const LoveExercises = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userProfile, exercises.length]);
 
-	// console.log(loveExercises);
+	useEffect(() => {
+		if (loveExercises.length > 0) {
+			const displayedExercises = loveExercises.slice(
+				(currentPage - 1) * 8,
+				currentPage * 8,
+			);
+			setDisplayedExercises(displayedExercises);
+		} else {
+			setDisplayedExercises([]);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loveExercises, currentPage]);
 
-	const renderCard = loveExercises
-		.slice(0, 8)
-		.map(exercise => (
-			<BasicCard
-				key={`${exercise.name}-${exercise.id}`}
-				exercise={exercise}
-				detailLink={`/exercisedetail/${exercise.id}`}
-				isAuth={isAuth}
-			/>
-		));
+	const renderCard = displayedExercises.map(exercise => (
+		<BasicCard
+			key={`${exercise.name}-${exercise.id}`}
+			exercise={exercise}
+			detailLink={`/exercisedetail/${exercise.id}`}
+			isAuth={isAuth}
+		/>
+	));
 
 	return (
 		<div className="app__container">
 			{!loading.exerciseLoading ? (
 				<div className="app__section app__love-exercise">
-					{renderCard}
+					<div className="app__love-exercise__card-container">
+						{renderCard}
+					</div>
+
+					<Pagination
+						count={Math.ceil(loveExercises.length / 8)}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+					/>
 				</div>
 			) : (
 				<div className="app__section app__love-exercise">

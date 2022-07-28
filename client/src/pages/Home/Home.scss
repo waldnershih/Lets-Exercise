@@ -1,9 +1,15 @@
 .app__home {
 	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-items: center;
+	flex-direction: column;
 	padding: 160px 80px;
+	.app__home-card-container {
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-wrap: wrap;
+	}
 }
 
 // tagbar style

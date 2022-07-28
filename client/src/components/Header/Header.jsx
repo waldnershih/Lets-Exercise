@@ -114,14 +114,21 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 };
 
 export const Tagbar = () => {
-	const { tagList: tags } = useSelector(state => state.exercises);
 	const dispatch = useDispatch();
+	const { tagList: tags } = useSelector(state => state.exercises);
+	const [selectedTag, setSelectedTag] = useState('');
+
 	useEffect(() => {
 		dispatch(fetchTagList());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	useEffect(() => {
+		if (tags) setSelectedTag(tags[0]);
+	}, [tags]);
+
 	const handleOnTagClick = tag => {
+		setSelectedTag(tag);
 		dispatch(fetchExercisesByTag(tag));
 	};
 
@@ -130,7 +137,9 @@ export const Tagbar = () => {
 			{tags.map(tag => (
 				<div
 					key={tag}
-					className="tagbar__container"
+					className={`tagbar__container ${
+						selectedTag === tag ? 'app--darkskinbg' : 'app--skinbg'
+					}`}
 					onClick={() => handleOnTagClick(tag)}
 				>
 					<p className="p-text-16">{tag}</p>
