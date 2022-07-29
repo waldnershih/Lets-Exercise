@@ -4,17 +4,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
 	fetchTagList,
+	setCurrentPage,
 } from '../../redux/slices/exerciseSlice';
 
 import './LoveExercises.scss';
 
 const LoveExercises = () => {
 	const dispatch = useDispatch();
-	const { exercises, loading } = useSelector(state => state.exercises);
+	const { currentPage, exercises, loading } = useSelector(
+		state => state.exercises,
+	);
 	const { userProfile } = useSelector(state => state.user);
 	const { isAuth } = useSelector(state => state.isAuth);
 	const [loveExercises, setLoveExercises] = useState([]);
-	const [currentPage, setCurrentPage] = useState(1);
 	const [displayedExercises, setDisplayedExercises] = useState([]);
 
 	useEffect(() => {
@@ -22,6 +24,7 @@ const LoveExercises = () => {
 			dispatch(fetchExercisesByTag('all'));
 			dispatch(fetchTagList());
 		}
+		dispatch(setCurrentPage(1));
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -38,7 +41,7 @@ const LoveExercises = () => {
 			setLoveExercises(userLoveExercises);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [userProfile, exercises.length]);
+	}, [userProfile, exercises]);
 
 	useEffect(() => {
 		if (loveExercises.length > 0) {
@@ -70,11 +73,7 @@ const LoveExercises = () => {
 						{renderCard}
 					</div>
 
-					<Pagination
-						count={Math.ceil(loveExercises.length / 8)}
-						currentPage={currentPage}
-						setCurrentPage={setCurrentPage}
-					/>
+					<Pagination count={Math.ceil(loveExercises.length / 8)} />
 				</div>
 			) : (
 				<div className="app__section app__love-exercise">

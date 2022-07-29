@@ -1,11 +1,14 @@
 const reviewModel = require('../collections/reviews');
-const { INTERNAL_SERVER_ERROR, ALREADY_EXISTS } = require('../../utils/error');
+const { INTERNAL_SERVER_ERROR } = require('../../utils/error');
 
-async function getReviewsByExerciseId(id) {
+async function getReviewsByExerciseId(id, skip, limit) {
 	try {
 		const reviews = await reviewModel
 			.find({ exerciseId: id })
-			.select({ __v: 0 });
+			.select({ __v: 0 })
+			.sort({ createdAt: -1 })
+			.skip(skip)
+			.limit(limit);
 		return reviews;
 	} catch (err) {
 		throw INTERNAL_SERVER_ERROR;
@@ -53,10 +56,22 @@ async function deleteReviewById(id) {
 	}
 }
 
+async function getReviewsLengthByExerciseId(id) {
+	try {
+		const reviewsLength = await reviewModel
+			.find({ exerciseId: id })
+			.countDocuments();
+		return reviewsLength;
+	} catch (err) {
+		throw INTERNAL_SERVER_ERROR;
+	}
+}
+
 module.exports = {
 	getReviewsByExerciseId,
 	createReviewByExerciseId,
 	getReviewById,
 	updateReviewById,
 	deleteReviewById,
+	getReviewsLengthByExerciseId,
 };

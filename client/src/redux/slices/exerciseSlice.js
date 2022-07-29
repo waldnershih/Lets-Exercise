@@ -14,6 +14,7 @@ const initialExercisesState = {
 		target: '',
 		equipment: '',
 	},
+	currentPage: 1,
 	loading: {
 		exerciseLoading: false,
 		targetMuscleloading: false,
@@ -121,7 +122,11 @@ export const fetchTagList = createAsyncThunk(
 export const exerciseSlice = createSlice({
 	name: 'exercises',
 	initialState: initialExercisesState,
-	reducers: {},
+	reducers: {
+		setCurrentPage: (state, action) => {
+			state.currentPage = action.payload;
+		},
+	},
 	extraReducers: {
 		// fetchExercisesByTag
 		[fetchExercisesByTag.pending]: (state, _) => {
@@ -202,5 +207,7 @@ export const exerciseSlice = createSlice({
 		},
 	},
 });
+
+export const { setCurrentPage } = exerciseSlice.actions;
 
 export const exerciseReducer = exerciseSlice.reducer;

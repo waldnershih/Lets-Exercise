@@ -1,0 +1,97 @@
+.app__review {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding: 10px 0;
+	.app__review__avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		margin-right: 16px;
+	}
+	.app__review__info {
+		flex: 1;
+		padding: 0 10px;
+		.app__review__info-title {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+			margin-bottom: 5px;
+			p {
+				text-transform: none;
+			}
+			.app__review__info__author {
+				color: var(--secondary-color);
+				font-weight: bold;
+			}
+		}
+		.app__review__info-subtitle {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+			margin-bottom: 5px;
+			svg {
+				height: 20px;
+				width: 20px;
+				color: var(--yellow-color);
+			}
+			p {
+				margin-right: 10px;
+				text-transform: none;
+			}
+			.app__review__rating {
+				margin-right: 15px;
+			}
+			.app__review__info__date {
+				color: var(--gray-color);
+			}
+		}
+	}
+
+	.app__review__actions {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-end;
+		svg {
+			font-size: 24px;
+			color: var(--black-color);
+			// opacity: 0;
+		}
+	}
+	// &:hover {
+	// 	.app__review__actions {
+	// 		svg {
+	// 			opacity: 1;
+	// 		}
+	// 	}
+	// }
+}
+
+.dialog-action-button {
+	p {
+		padding: 4px 20px;
+		border-radius: 4px;
+		color: var(--secondary-color);
+		opacity: 0.9;
+		&:hover {
+			cursor: pointer;
+			opacity: 1;
+			background-color: var(--secondary-color-20);
+		}
+	}
+}
+.dialog-content {
+	textarea {
+		width: 100%;
+		min-width: 400px;
+	}
+	.dialog-content__rating-container {
+		svg {
+			margin-top: 15px;
+			color: var(--yellow-color);
+		}
+	}
+}

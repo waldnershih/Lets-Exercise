@@ -4,6 +4,7 @@ import {
 	fetchTagList,
 	fetchExercisesByTag,
 	fetchExercisesByName,
+	setCurrentPage,
 } from '../../redux/slices/exerciseSlice';
 import { logoutUser } from '../../redux/slices/userSlice';
 import { HiMenuAlt4 } from 'react-icons/hi';
@@ -128,6 +129,8 @@ export const Tagbar = () => {
 	}, [tags]);
 
 	const handleOnTagClick = tag => {
+		dispatch(setCurrentPage(1)); // reset pagination
+
 		setSelectedTag(tag);
 		dispatch(fetchExercisesByTag(tag));
 	};

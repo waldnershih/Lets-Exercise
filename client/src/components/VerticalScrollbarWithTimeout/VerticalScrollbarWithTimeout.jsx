@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import './VerticalScrollbarWithTimeout.scss';
 
-const delay = 2; // 1 second delay
+const delay = 0.5; // 1 second delay
 
 let loadMoreItemsTimeout;
 
@@ -53,12 +53,12 @@ const VerticalScrollbarWithTimeout = ({ items }) => {
 			loadMore={handleLoadMoreItems}
 			hasMore={hasMore}
 			loader={
-				<div className="app__vertical-scrollbar__loader" key={0}>
+				<div className="app__vertical-scrollbarwt__loader" key={0}>
 					<p className="p-text-18">Loading ...</p>
 				</div>
 			}
 			// useWindow={false}
-			className="app__vertical-scrollbar"
+			className="app__vertical-scrollbarwt"
 		>
 			{loadItems}
 		</InfiniteScroll>

@@ -4,15 +4,20 @@ const {
 	getReviewById,
 	updateReviewById,
 	deleteReviewById,
+	getReviewsLengthByExerciseId,
 } = require('../models/services/reviews');
-
+const { getPagination } = require('../utils/query');
 const { BAD_REQUEST, FIELD_MISSING } = require('../utils/error');
+const { delay } = require('../utils/delay');
 
 async function httpGetReviewsByExerciseId(req, res, next) {
+	const { skip, limit } = getPagination(req.query);
 	const { exerciseId } = req.params;
 
+	delay(500);
+
 	try {
-		const reviews = await getReviewsByExerciseId(exerciseId);
+		const reviews = await getReviewsByExerciseId(exerciseId, skip, limit);
 		res.status(200).json(reviews);
 	} catch (err) {
 		return next(err);
@@ -21,21 +26,32 @@ async function httpGetReviewsByExerciseId(req, res, next) {
 
 async function httpCreateReviewByExerciseId(req, res, next) {
 	const { exerciseId } = req.params;
-	const { description, star, owner } = req.body;
+	const { description, rating } = req.body;
+	const { _id: ownerId, name: ownerName } = req.user;
 
-	console.log(req.params);
-
-	if (!description || !star || !owner.name || !owner.ownerId) {
+	if (!description || !rating || !ownerName || !ownerId) {
 		return next(FIELD_MISSING);
 	}
 
-	if (star < 1 || star > 5) {
+	if (rating < 1 || rating > 5) {
 		return next(BAD_REQUEST);
 	}
 
+	const review = {
+		description,
+		rating,
+		owner: {
+			ownerId,
+			ownerName,
+		},
+	};
+
 	try {
-		const review = await createReviewByExerciseId(exerciseId, req.body);
-		res.status(201).json(review);
+		const createdReview = await createReviewByExerciseId(
+			exerciseId,
+			review,
+		);
+		res.status(201).json(createdReview);
 	} catch (err) {
 		return next(err);
 	}
@@ -53,19 +69,29 @@ async function httpGetReviewById(req, res, next) {
 
 async function httpUpdateReviewById(req, res, next) {
 	const { reviewId } = req.params;
-	const { description, star, owner } = req.body;
+	const { description, rating } = req.body;
+	const { _id: ownerId, name: ownerName } = req.user;
 
-	if (!description || !star || !owner.name || !owner.ownerId) {
+	if (!description || !rating || !ownerName || !ownerId) {
 		return next(FIELD_MISSING);
 	}
 
-	if (star < 1 || star > 5) {
+	if (rating < 1 || rating > 5) {
 		return next(BAD_REQUEST);
 	}
 
+	const review = {
+		description,
+		rating,
+		owner: {
+			ownerId,
+			ownerName,
+		},
+	};
+
 	try {
-		const review = await updateReviewById(reviewId, req.body);
-		res.status(200).json(review);
+		const updatedReview = await updateReviewById(reviewId, review);
+		res.status(200).json(updatedReview);
 	} catch (err) {
 		return next(err);
 	}
@@ -81,10 +107,21 @@ async function httpDeleteReviewById(req, res, next) {
 	}
 }
 
+async function httpGetReviewsLengthByExerciseId(req, res, next) {
+	const { exerciseId } = req.params;
+	try {
+		const length = await getReviewsLengthByExerciseId(exerciseId);
+		res.status(200).json(length);
+	} catch (err) {
+		return next(err);
+	}
+}
+
 module.exports = {
 	httpGetReviewsByExerciseId,
 	httpCreateReviewByExerciseId,
 	httpGetReviewById,
 	httpUpdateReviewById,
 	httpDeleteReviewById,
+	httpGetReviewsLengthByExerciseId,
 };

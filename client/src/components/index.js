@@ -12,7 +12,9 @@ import Protected from './Protected/Protected';
 import HorizontalCard from './HorizontalCard/HorizontalCard';
 import Pagination from './Pagination/Pagination';
 import VerticalScrollbarWithTimeout from './VerticalScrollbarWithTimeout/VerticalScrollbarWithTimeout';
+import BasicVerticalScrollbar from './BasicVerticalScrollbar/BasicVerticalScrollbar';
 import ScrollToTop from './ScrollToTop/ScrollToTop';
+import Review from './Review/Review';
 
 export {
 	Header,
@@ -29,5 +31,7 @@ export {
 	HorizontalCard,
 	Pagination,
 	VerticalScrollbarWithTimeout,
+	BasicVerticalScrollbar,
 	ScrollToTop,
+	Review,
 };

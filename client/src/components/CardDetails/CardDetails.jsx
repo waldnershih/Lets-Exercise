@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BasicMenu, BasicPopover } from '../../components/';
 import { patchUserProfile } from '../../redux/slices/userSlice';
+import Rating from '@mui/material/Rating';
 
 import './CardDetails.scss';
 
@@ -96,6 +97,15 @@ const CardDetails = ({ data }) => {
 						title="Are you sure to unsave?"
 						handleOnYesClick={handleOnYesClick}
 						handleOnNoClick={() => setAnchorElPopover(null)}
+					/>
+				</div>
+				<div className="tags-container__rating-box">
+					<Rating
+						name="half-rating-read"
+						defaultValue={2.5}
+						precision={0.5}
+						readOnly
+						size="large"
 					/>
 				</div>
 			</div>

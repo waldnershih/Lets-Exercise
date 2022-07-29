@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import {
 	CardDetails,
 	// Video,
@@ -8,6 +8,8 @@ import {
 	Loader,
 	HorizontalCard,
 	VerticalScrollbarWithTimeout,
+	Review,
+	BasicVerticalScrollbar,
 } from '../../components';
 import { Divider } from '../../components/Header/Header';
 import {
@@ -16,7 +18,14 @@ import {
 	fetchExerciseById,
 } from '../../redux/slices/exerciseSlice';
 
-import { fetchVideosByTerm } from '../../redux/slices/videoSlice';
+// import { fetchVideosByTerm } from '../../redux/slices/videoSlice';
+import {
+	fetchReviewsWithPagination,
+	createReviewByExerciseId,
+	fetchReviewsLengthByExerciseId,
+	resetReviews,
+} from '../../redux/slices/reviewSlice';
+import { Rating } from '@mui/material';
 
 import './ExerciseDetail.scss';
 
@@ -38,25 +47,45 @@ const tags = [
 const ExerciseDetail = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
+	const { pathname } = useLocation();
 	const {
 		selectedExercise,
 		targetMuscleExercises,
 		equipmentExercises,
 		loading: exerciseLoading,
 	} = useSelector(state => state.exercises);
-	const {
-		// videos,
-		loading: videoLoading,
-	} = useSelector(state => state.videos);
+	// const {
+	// 	videos,
+	// 	loading: videoLoading,
+	// } = useSelector(state => state.videos);
 	const { isAuth } = useSelector(state => state.isAuth);
+	const { reviews, allReviewsLength, loading } = useSelector(
+		state => state.reviews,
+	);
+
 	const [selectedTag, setSelectedTag] = useState(tags[0].value);
 	const [commentValue, setCommentValue] = useState('');
+	const [ratingValue, setRatingValue] = useState(0);
 
 	useEffect(() => {
+		dispatch(resetReviews());
+		setSelectedTag(tags[0].value);
+		setCommentValue('');
+		setRatingValue(0);
+
 		dispatch(fetchExerciseById(id));
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id]);
+	}, [id, pathname]);
+
+	useEffect(
+		() => {
+			console.log('selectedExercise', selectedExercise?._id);
+			dispatch(fetchReviewsLengthByExerciseId(selectedExercise._id));
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[selectedExercise?._id],
+	);
 
 	useEffect(() => {
 		if (selectedExercise.target) {
@@ -65,18 +94,49 @@ const ExerciseDetail = () => {
 		if (selectedExercise.equipment) {
 			dispatch(fetchExercisesByEquiment(selectedExercise.equipment));
 		}
-		if (selectedExercise.name) {
-			dispatch(fetchVideosByTerm(selectedExercise.name));
-		}
+		// if (selectedExercise.name) {
+		// 	dispatch(fetchVideosByTerm(selectedExercise.name));
+		// }
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedExercise]);
+
+	useEffect(() => {
+		setCommentValue('');
+		setRatingValue(0);
+	}, [reviews]);
 
 	const handleOnTagClick = tag => {
 		setSelectedTag(tag.value);
 	};
 
 	const handleOnCommentClick = () => {
-		console.log(commentValue);
+		if (isAuth) {
+			if (
+				ratingValue > 0 &&
+				ratingValue <= 7 &&
+				commentValue.length > 0
+			) {
+				const review = {
+					description: commentValue,
+					rating: ratingValue,
+				};
+
+				dispatch(
+					createReviewByExerciseId({
+						exerciseId: selectedExercise._id,
+						review,
+					}),
+				);
+			} else {
+				alert('Please fill all fields');
+			}
+		} else {
+			alert('You must be logged in to comment');
+		}
+	};
+
+	const handleOnRatingChange = (event, value) => {
+		setRatingValue(value);
 	};
 
 	// const renderVideos =
@@ -109,6 +169,23 @@ const ExerciseDetail = () => {
 				/>
 			));
 
+	const renderReviews = reviews.map((review, i) => (
+		<Review key={`${review.id}-${i}`} review={review} />
+	));
+
+	const handleLoadMoreItems = () => {
+		console.log('load more');
+		if (!loading) {
+			dispatch(
+				fetchReviewsWithPagination({
+					exerciseId: selectedExercise._id,
+					page: reviews.length / 7 + 1,
+					limit: 7,
+				}),
+			);
+		}
+	};
+
 	return (
 		<div className="app__container">
 			<div className="app__section app__exercise-detail">
@@ -116,24 +193,61 @@ const ExerciseDetail = () => {
 					<div className="card-detail-container">
 						<CardDetails data={selectedExercise} />
 						<Divider />
-						<h2 className="subHead-text">{0} Comment</h2>
+						<div className="card-detail-container__comment-title">
+							<h2
+								className="subHead-text"
+								style={{ marginRight: '16px' }}
+							>
+								<b>{allReviewsLength}</b> Comment
+							</h2>
+							<p className="p-text-18">(One Person One Review)</p>
+						</div>
+
 						<div className="card-detail-container__comment-container">
 							<textarea
 								name="comment"
 								id=""
 								rows="4"
-								placeholder="Comment"
+								placeholder="Comment (Maximum 100 characters)"
 								value={commentValue}
 								onChange={e => setCommentValue(e.target.value)}
+								maxLength="170"
 							/>
 							<div className="card-detail-container__comment-container__action-container">
-								<div onClick={() => setCommentValue('')}>
+								<div className="exercise-detail__rating-box">
+									<Rating
+										name="size-large"
+										defaultValue={0}
+										size="large"
+										value={ratingValue}
+										onChange={handleOnRatingChange}
+									/>
+								</div>
+
+								<div
+									onClick={() => setCommentValue('')}
+									className="p-text-18"
+								>
 									Clear
 								</div>
-								<div onClick={handleOnCommentClick}>
+								<div
+									onClick={handleOnCommentClick}
+									className="p-text-18"
+								>
 									Comment
 								</div>
 							</div>
+						</div>
+						<Divider />
+						<div className="card-detail-container__comment-reviews">
+							{renderReviews && (
+								<BasicVerticalScrollbar
+									length={allReviewsLength}
+									items={renderReviews}
+									handleLoadMoreItems={handleLoadMoreItems}
+									loading={loading}
+								/>
+							)}
 						</div>
 					</div>
 
@@ -153,15 +267,18 @@ const ExerciseDetail = () => {
 								</div>
 							))}
 						</div>
-						{selectedTag === 'recommendedVideos' &&
+						{/* {selectedTag === 'recommendedVideos' &&
 							(!videoLoading ? (
-								// <div className="video-container">
-								// 	{renderVideos}
-								// </div>
-								<Loader flex={1} />
+								<div className="video-container">
+									{renderVideos}
+								</div>
+								
 							) : (
 								<Loader flex={1} />
-							))}
+							))} */}
+						{selectedTag === 'recommendedVideos' && (
+							<Loader flex={1} />
+						)}
 						{selectedTag === 'similarTargetMuscleExercises' &&
 							(!exerciseLoading.targetMuscleloading ? (
 								<VerticalScrollbarWithTimeout
@@ -180,36 +297,6 @@ const ExerciseDetail = () => {
 							))}
 					</div>
 				</div>
-				{/* <div className="horizontal-scrollbar-container">
-					<h2 className="subHead-text">
-						Similar Target Muscle Exercises
-					</h2>
-					{!exerciseLoading.targetMuscleloading ? (
-						<HorizontalScrollbar
-							items={
-								targetMuscleExercises &&
-								targetMuscleExercises.slice(0, 11)
-							}
-						/>
-					) : (
-						<Loader />
-					)}
-				</div>
-				<div className="horizontal-scrollbar-container">
-					<h2 className="subHead-text">
-						Similar Equipment Exercises
-					</h2>
-					{!exerciseLoading.equipmentLoading ? (
-						<HorizontalScrollbar
-							items={
-								equipmentExercises &&
-								equipmentExercises.slice(0, 11)
-							}
-						/>
-					) : (
-						<Loader />
-					)}
-				</div> */}
 			</div>
 		</div>
 	);

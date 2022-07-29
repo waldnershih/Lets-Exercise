@@ -1,6 +1,7 @@
 import { baseExerciseUrl, exerciseOptions } from './fetchExercise';
 import { baseVideoUrl, youtubeOptions, videoParams } from './fetchYoutubeVideo';
 import { baseUserUrl, userOptions } from './fetchUser';
+import { baseReviewsUrl, reviewsOptions } from './fetchReviews';
 
 const fetchData = async (url, options, type = 'selfServer') => {
 	options.method = 'GET';
@@ -126,4 +127,6 @@ export {
 	videoParams,
 	baseUserUrl,
 	userOptions,
+	baseReviewsUrl,
+	reviewsOptions,
 };

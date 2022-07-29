@@ -85,11 +85,6 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 				>
 					<p className="caption-text">{bodyPart}</p>
 				</div>
-				{/* <div className={`tag-container__box app--lightpurplebg`}>
-					<p className="caption-text">{target}</p>
-				</div> */}
-
-				{/* <FaHeart /> */}
 			</div>
 			<p className="p-text-18">
 				{nameLength > 22 ? `${name.substring(0, 22)} ...` : name}
