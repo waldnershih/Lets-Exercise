@@ -39,4 +39,13 @@
 		border-radius: 12px;
 		opacity: 1;
 	}
+	.tags-container__rating-box {
+		flex: 1;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		svg {
+			color: var(--yellow-color);
+		}
+	}
 }

@@ -23,8 +23,16 @@
 
 .card-detail-container {
 	flex: 1;
-	h2 {
-		margin-top: 15px;
+
+	.card-detail-container__comment-title {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 20px 0;
+		// h2,
+		// p {
+		// 	text-align: bottom;
+		// }
 	}
 	.card-detail-container__comment-container {
 		margin: 20px;
@@ -35,11 +43,12 @@
 			display: flex;
 			justify-content: flex-end;
 			margin-top: 16px;
-			div:first-child {
+			div:nth-child(2) {
 				margin-right: 30px;
 			}
-			div {
-				padding: 10px 20px;
+			div:nth-child(2),
+			div:nth-child(3) {
+				padding: 4px 20px;
 				border-radius: 4px;
 				color: var(--secondary-color);
 				opacity: 0.9;
@@ -49,7 +58,16 @@
 					background-color: var(--secondary-color-20);
 				}
 			}
+			.exercise-detail__rating-box {
+				flex: 1;
+				svg {
+					color: var(--yellow-color);
+				}
+			}
 		}
+	}
+	.card-detail-container__comment-reviews {
+		margin: 20px;
 	}
 }
 

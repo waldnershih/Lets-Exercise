@@ -13,6 +13,7 @@ import HorizontalCard from './HorizontalCard/HorizontalCard';
 import Pagination from './Pagination/Pagination';
 import VerticalScrollbarWithTimeout from './VerticalScrollbarWithTimeout/VerticalScrollbarWithTimeout';
 import ScrollToTop from './ScrollToTop/ScrollToTop';
+import Review from './Review/Review';
 
 export {
 	Header,
@@ -30,4 +31,5 @@ export {
 	Pagination,
 	VerticalScrollbarWithTimeout,
 	ScrollToTop,
+	Review,
 };

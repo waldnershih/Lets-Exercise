@@ -1,6 +1,5 @@
 import React from 'react';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { Menu, MenuItem } from '@mui/material';
 
 const BasicMenu = ({ children, items, anchorEl, setAnchorEl }) => {
 	const open = Boolean(anchorEl);
@@ -8,6 +7,7 @@ const BasicMenu = ({ children, items, anchorEl, setAnchorEl }) => {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
 	return (
 		<div>
 			{children}

@@ -116,7 +116,9 @@
 	text-align: center;
 	color: var(--black-color);
 	text-transform: capitalize;
-	margin-bottom: 5px;
+	// margin-bottom: 5px;
+	margin: 0;
+	padding: 0;
 
 	span {
 		color: var(--secondary-color);
@@ -131,7 +133,7 @@
 	font-size: 18px;
 	text-align: left;
 	color: var(--black-color);
-	line-height: 35px;
+	line-height: 34px;
 
 	padding: 0;
 	margin: 0;

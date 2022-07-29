@@ -18,7 +18,7 @@ router
 router
 	.route('/review/:reviewId')
 	.get(verifyJWT, httpGetReviewById)
-	.patch(verifyJWT, httpUpdateReviewById)
+	.put(verifyJWT, httpUpdateReviewById)
 	.delete(verifyJWT, httpDeleteReviewById);
 
 module.exports = router;

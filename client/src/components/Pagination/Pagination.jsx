@@ -1,12 +1,16 @@
 import React from 'react';
 import Pagination from '@mui/material/Pagination';
 import { theme, ThemeProvider } from '../../utils/theme';
+import { useDispatch } from 'react-redux';
+import { setCurrentPage } from '../../redux/slices/exerciseSlice';
 
 import './Pagination.scss';
 
-const CustomisePagination = ({ count, setCurrentPage }) => {
+const CustomisePagination = ({ count }) => {
+	const dispatch = useDispatch();
+
 	const handleChange = (event, value) => {
-		setCurrentPage(value);
+		dispatch(setCurrentPage(value));
 	};
 
 	return (

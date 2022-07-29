@@ -8,6 +8,7 @@ import {
 	Loader,
 	HorizontalCard,
 	VerticalScrollbarWithTimeout,
+	Review,
 } from '../../components';
 import { Divider } from '../../components/Header/Header';
 import {
@@ -17,6 +18,11 @@ import {
 } from '../../redux/slices/exerciseSlice';
 
 import { fetchVideosByTerm } from '../../redux/slices/videoSlice';
+import {
+	fetchAllReviewsByExerciseId,
+	createReviewByExerciseId,
+} from '../../redux/slices/reviewSlice';
+import { Rating } from '@mui/material';
 
 import './ExerciseDetail.scss';
 
@@ -49,14 +55,27 @@ const ExerciseDetail = () => {
 		loading: videoLoading,
 	} = useSelector(state => state.videos);
 	const { isAuth } = useSelector(state => state.isAuth);
+	const { reviews } = useSelector(state => state.reviews);
+
 	const [selectedTag, setSelectedTag] = useState(tags[0].value);
 	const [commentValue, setCommentValue] = useState('');
+	const [ratingValue, setRatingValue] = useState(0);
 
 	useEffect(() => {
+		setSelectedTag(tags[0].value);
+		setCommentValue('');
+		setRatingValue(0);
 		dispatch(fetchExerciseById(id));
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id]);
+
+	useEffect(() => {
+		if (selectedExercise) {
+			dispatch(fetchAllReviewsByExerciseId(selectedExercise._id));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedExercise]);
 
 	useEffect(() => {
 		if (selectedExercise.target) {
@@ -71,12 +90,43 @@ const ExerciseDetail = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedExercise]);
 
+	useEffect(() => {
+		setCommentValue('');
+		setRatingValue(0);
+	}, [reviews]);
+
 	const handleOnTagClick = tag => {
 		setSelectedTag(tag.value);
 	};
 
 	const handleOnCommentClick = () => {
-		console.log(commentValue);
+		if (isAuth) {
+			if (
+				ratingValue > 0 &&
+				ratingValue <= 5 &&
+				commentValue.length > 0
+			) {
+				const review = {
+					description: commentValue,
+					rating: ratingValue,
+				};
+
+				dispatch(
+					createReviewByExerciseId({
+						exerciseId: selectedExercise._id,
+						review,
+					}),
+				);
+			} else {
+				alert('Please fill all fields');
+			}
+		} else {
+			alert('You must be logged in to comment');
+		}
+	};
+
+	const handleOnRatingChange = (event, value) => {
+		setRatingValue(value);
 	};
 
 	// const renderVideos =
@@ -116,24 +166,63 @@ const ExerciseDetail = () => {
 					<div className="card-detail-container">
 						<CardDetails data={selectedExercise} />
 						<Divider />
-						<h2 className="subHead-text">{0} Comment</h2>
+						<div className="card-detail-container__comment-title">
+							<h2
+								className="subHead-text"
+								style={{ marginRight: '16px' }}
+							>
+								<b>{reviews ? reviews.length : 0}</b> Comment
+							</h2>
+							<p className="p-text-18">(One Person One Review)</p>
+						</div>
+
 						<div className="card-detail-container__comment-container">
 							<textarea
 								name="comment"
 								id=""
 								rows="4"
-								placeholder="Comment"
+								placeholder="Comment (Maximum 100 characters)"
 								value={commentValue}
 								onChange={e => setCommentValue(e.target.value)}
+								maxLength="150"
 							/>
 							<div className="card-detail-container__comment-container__action-container">
-								<div onClick={() => setCommentValue('')}>
+								<div className="exercise-detail__rating-box">
+									<Rating
+										name="size-large"
+										defaultValue={0}
+										size="large"
+										value={ratingValue}
+										onChange={handleOnRatingChange}
+									/>
+								</div>
+
+								<div
+									onClick={() => setCommentValue('')}
+									className="p-text-18"
+								>
 									Clear
 								</div>
-								<div onClick={handleOnCommentClick}>
+								<div
+									onClick={handleOnCommentClick}
+									className="p-text-18"
+								>
 									Comment
 								</div>
 							</div>
+						</div>
+						<Divider />
+						<div className="card-detail-container__comment-reviews">
+							{reviews &&
+								reviews.map(
+									(review, i) =>
+										review && (
+											<Review
+												review={review}
+												key={`${review}-${i}`}
+											/>
+										),
+								)}
 						</div>
 					</div>
 

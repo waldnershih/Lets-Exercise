@@ -7,7 +7,7 @@ const ReviewSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		star: {
+		rating: {
 			type: Number,
 			min: 1,
 			max: 5,
@@ -17,9 +17,9 @@ const ReviewSchema = new Schema(
 			ownerId: {
 				type: String,
 				required: true,
-				unique: true,
+				// unique: true,
 			},
-			name: {
+			ownerName: {
 				type: String,
 				required: true,
 			},
