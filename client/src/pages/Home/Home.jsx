@@ -25,6 +25,10 @@ const Home = () => {
 	}, []);
 
 	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}, [currentPage]);
+
+	useEffect(() => {
 		if (userProfile) {
 			const userUnsaveExercises = exercises.filter(
 				exercise => !userProfile.loveExercises.includes(exercise._id),

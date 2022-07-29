@@ -7,6 +7,7 @@ import {
 	// HorizontalScrollbar,
 	Loader,
 	HorizontalCard,
+	VerticalScrollbarWithTimeout,
 } from '../../components';
 import { Divider } from '../../components/Header/Header';
 import {
@@ -86,16 +87,14 @@ const ExerciseDetail = () => {
 
 	const renderTargetMuscleExercises =
 		targetMuscleExercises &&
-		targetMuscleExercises
-			.slice(0, 11)
-			.map((exercise, i) => (
-				<HorizontalCard
-					key={`${exercise.id}-${i}`}
-					exercise={exercise}
-					detailLink={`/exercisedetail/${exercise.id}`}
-					isAuth={isAuth}
-				/>
-			));
+		targetMuscleExercises.map((exercise, i) => (
+			<HorizontalCard
+				key={`${exercise.id}-${i}`}
+				exercise={exercise}
+				detailLink={`/exercisedetail/${exercise.id}`}
+				isAuth={isAuth}
+			/>
+		));
 
 	const renderEquipmentExercises =
 		equipmentExercises &&
@@ -165,13 +164,17 @@ const ExerciseDetail = () => {
 							))}
 						{selectedTag === 'similarTargetMuscleExercises' &&
 							(!exerciseLoading.targetMuscleloading ? (
-								renderTargetMuscleExercises
+								<VerticalScrollbarWithTimeout
+									items={renderTargetMuscleExercises}
+								/>
 							) : (
 								<Loader flex={1} />
 							))}
 						{selectedTag === 'similarEquipmentExercises' &&
 							(!exerciseLoading.equipmentLoading ? (
-								renderEquipmentExercises
+								<VerticalScrollbarWithTimeout
+									items={renderEquipmentExercises}
+								/>
 							) : (
 								<Loader flex={1} />
 							))}

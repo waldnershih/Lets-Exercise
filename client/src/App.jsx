@@ -9,7 +9,7 @@ import {
 	Signup,
 } from './pages';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { Footer, Header, Sidebar, Protected } from './components';
+import { Footer, Header, Sidebar, Protected, ScrollToTop } from './components';
 import { useLocation } from 'react-router-dom';
 import { setIsAuth } from './redux/slices/isAuthSlice';
 import { fetchUserProfile } from './redux/slices/userSlice';
@@ -47,39 +47,41 @@ const App = () => {
 
 	return (
 		<div className="app">
-			{!blacklist.includes(location.pathname) && (
-				<Header setIsSidebarOpen={setIsSidebarOpen} />
-			)}
-			{
-				<Sidebar
-					isSidebarOpen={isSidebarOpen}
-					setIsSidebarOpen={setIsSidebarOpen}
-				/>
-			}
-			<Routes>
-				<Route path="/" exact element={<Home />} />
-				{/* protect route */}
+			<ScrollToTop>
+				{!blacklist.includes(location.pathname) && (
+					<Header setIsSidebarOpen={setIsSidebarOpen} />
+				)}
+				{
+					<Sidebar
+						isSidebarOpen={isSidebarOpen}
+						setIsSidebarOpen={setIsSidebarOpen}
+					/>
+				}
+				<Routes>
+					<Route path="/" exact element={<Home />} />
+					{/* protect route */}
 
-				<Route
-					path="/profile/loveexercises"
-					element={
-						<Protected>
-							<LoveExercises />
-						</Protected>
-					}
-				/>
+					<Route
+						path="/profile/loveexercises"
+						element={
+							<Protected>
+								<LoveExercises />
+							</Protected>
+						}
+					/>
 
-				<Route
-					path="/exercisedetail/:id"
-					exact
-					element={<ExerciseDetail />}
-				/>
-				<Route path="/signin" exact element={<Signin />} />
-				<Route path="/signup" exact element={<Signup />} />
-				<Route path="/404" exact element={<NotFound />} />
-				<Route path="*" element={<Navigate replace to="/404" />} />
-			</Routes>
-			{!blacklist.includes(location.pathname) && <Footer />}
+					<Route
+						path="/exercisedetail/:id"
+						exact
+						element={<ExerciseDetail />}
+					/>
+					<Route path="/signin" exact element={<Signin />} />
+					<Route path="/signup" exact element={<Signup />} />
+					<Route path="/404" exact element={<NotFound />} />
+					<Route path="*" element={<Navigate replace to="/404" />} />
+				</Routes>
+				{!blacklist.includes(location.pathname) && <Footer />}
+			</ScrollToTop>
 		</div>
 	);
 };

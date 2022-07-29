@@ -11,6 +11,8 @@ import BasicPopover from './BasicPopover/BasicPopover';
 import Protected from './Protected/Protected';
 import HorizontalCard from './HorizontalCard/HorizontalCard';
 import Pagination from './Pagination/Pagination';
+import VerticalScrollbarWithTimeout from './VerticalScrollbarWithTimeout/VerticalScrollbarWithTimeout';
+import ScrollToTop from './ScrollToTop/ScrollToTop';
 
 export {
 	Header,
@@ -26,4 +28,6 @@ export {
 	Protected,
 	HorizontalCard,
 	Pagination,
+	VerticalScrollbarWithTimeout,
+	ScrollToTop,
 };

@@ -27,6 +27,10 @@ const LoveExercises = () => {
 	}, []);
 
 	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}, [currentPage]);
+
+	useEffect(() => {
 		if (userProfile) {
 			const userLoveExercises = exercises.filter(exercise =>
 				userProfile.loveExercises.includes(exercise._id),
