@@ -17,6 +17,7 @@ import {
 	fetchExercisesByTargetMuscle,
 	fetchExercisesByEquiment,
 	fetchExerciseById,
+	fetchReviewRatingByExerciseId,
 } from '../../redux/slices/exerciseSlice';
 
 // import { fetchVideosByTerm } from '../../redux/slices/videoSlice';
@@ -92,6 +93,7 @@ const ExerciseDetail = () => {
 	useEffect(
 		() => {
 			dispatch(fetchReviewsLengthByExerciseId(selectedExercise._id));
+			dispatch(fetchReviewRatingByExerciseId(selectedExercise._id));
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[selectedExercise?._id],
@@ -129,6 +131,10 @@ const ExerciseDetail = () => {
 		setCommentValue('');
 		setRatingValue(0);
 	}, [allReviewsLength]);
+
+	useEffect(() => {
+		dispatch(fetchReviewRatingByExerciseId(selectedExercise._id));
+	}, [allReviewsLength, selectedExercise._id, dispatch]);
 
 	const handleOnTagClick = tag => {
 		setSelectedTag(tag.value);

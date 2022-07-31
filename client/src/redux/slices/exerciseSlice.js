@@ -14,18 +14,21 @@ const initialExercisesState = {
 		target: '',
 		equipment: '',
 	},
+	reviewRating: 0,
 	currentPage: 1,
 	loading: {
 		exerciseLoading: false,
 		targetMuscleloading: false,
 		equipmentLoading: false,
 		tagListLoading: false,
+		ratingLoading: false,
 	},
 	error: {
 		exerciseError: '',
 		targetMuscleError: '',
 		equipmentError: '',
 		tagListError: '',
+		ratingError: '',
 	},
 };
 
@@ -119,6 +122,18 @@ export const fetchTagList = createAsyncThunk(
 	},
 );
 
+export const fetchReviewRatingByExerciseId = createAsyncThunk(
+	'exercises/fetchReviewRatingByExerciseId',
+	async exerciseId => {
+		const reviewRatingUrl = `${baseExerciseUrl}/exercise/${exerciseId}/reviewRating`;
+		try {
+			return await fetchData(reviewRatingUrl, exerciseOptions);
+		} catch (error) {
+			throw error;
+		}
+	},
+);
+
 export const exerciseSlice = createSlice({
 	name: 'exercises',
 	initialState: initialExercisesState,
@@ -203,6 +218,19 @@ export const exerciseSlice = createSlice({
 		},
 		[fetchTagList.rejected]: (state, action) => {
 			state.loading.tagListLoading = false;
+			state.error.exerciseError = action.error.message;
+		},
+
+		// fetchReviewRatingByExerciseId
+		[fetchReviewRatingByExerciseId.pending]: (state, _) => {
+			state.loading.reviewRatingLoading = true;
+		},
+		[fetchReviewRatingByExerciseId.fulfilled]: (state, action) => {
+			state.loading.reviewRatingLoading = false;
+			state.reviewRating = action.payload;
+		},
+		[fetchReviewRatingByExerciseId.rejected]: (state, action) => {
+			state.loading.reviewRatingLoading = false;
 			state.error.exerciseError = action.error.message;
 		},
 	},

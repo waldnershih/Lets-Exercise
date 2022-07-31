@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const exerciseModel = require('../collections/exercises');
+const reviewModel = require('../collections/reviews');
 const { INTERNAL_SERVER_ERROR } = require('../../utils/error');
 
 const exerciseFilePath = path.join(
@@ -145,6 +146,23 @@ async function getBodyPartList() {
 	}
 }
 
+async function getReviewRatingByExerciseId(id) {
+	try {
+		const ratingsArray = await reviewModel.find(
+			{ exerciseId: id },
+			{ _id: 0, rating: 1 },
+		);
+		const ratings = ratingsArray.map(rating => rating.rating);
+		const averageRating =
+			ratings.reduce((acc, curr) => acc + curr, 0) / ratings.length;
+
+		return averageRating;
+	} catch (err) {
+		console.log(err);
+		throw INTERNAL_SERVER_ERROR;
+	}
+}
+
 module.exports = {
 	loadExercisesData,
 	getAllExercises,
@@ -153,4 +171,5 @@ module.exports = {
 	getExercisesByEquipment,
 	getExercisesByTarget,
 	getBodyPartList,
+	getReviewRatingByExerciseId,
 };

@@ -17,6 +17,7 @@ const CardDetails = ({ data }) => {
 
 	const { isAuth } = useSelector(state => state.isAuth);
 	const { userProfile } = useSelector(state => state.user);
+	const { reviewRating } = useSelector(state => state.exercises);
 
 	const [isSave, setIsSave] = useState(false);
 	const [anchorElMenu, setAnchorElMenu] = useState(null);
@@ -101,7 +102,8 @@ const CardDetails = ({ data }) => {
 				<div className="tags-container__rating-box">
 					<Rating
 						name="half-rating-read"
-						defaultValue={2.5}
+						// defaultValue={reviewRating}
+						value={reviewRating}
 						precision={0.5}
 						readOnly
 						size="large"

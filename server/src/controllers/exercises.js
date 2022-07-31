@@ -6,6 +6,7 @@ const {
 	getExercisesByEquipment,
 	getExercisesByTarget,
 	getBodyPartList,
+	getReviewRatingByExerciseId,
 } = require('../models/services/exercises');
 
 // const { BAD_REQUEST, FIELD_MISSING } = require('../models/errors');
@@ -69,6 +70,16 @@ async function httpGetBodyPartList(req, res, next) {
 	}
 }
 
+async function httpGetReviewRatingByExerciseId(req, res, next) {
+	const { id } = req.params;
+	try {
+		const reviewRating = await getReviewRatingByExerciseId(id);
+		res.status(200).json(reviewRating);
+	} catch (err) {
+		next(err);
+	}
+}
+
 module.exports = {
 	httpGetAllExercises,
 	httpGetExerciseById,
@@ -77,4 +88,5 @@ module.exports = {
 	httpGetExercisesByTarget,
 	loadExercisesData,
 	httpGetBodyPartList,
+	httpGetReviewRatingByExerciseId,
 };
