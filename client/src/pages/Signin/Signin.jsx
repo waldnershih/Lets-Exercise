@@ -25,18 +25,20 @@ const Signin = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
+	const { error, success } = useSelector(state => state.user);
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [loginData, setLoginData] = useState(loginDataInit);
 	const [isValid, setIsValid] = useState(validationInit);
-	const { error, success } = useSelector(state => state.user);
 	const [isSubmit, setIsSubmit] = useState(false);
 
 	useEffect(() => {
-		if (isSubmit && success) {
-			if (location.state?.from) {
-				navigate(location.state.from, { replace: true });
-			}
-		}
+		if (!isSubmit || !success) return;
+
+		if (!location.state?.from) return;
+
+		navigate(location.state.from, { replace: true });
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isSubmit, success, location.state?.from]);
 
@@ -52,21 +54,21 @@ const Signin = () => {
 	const handleOnSubmitForm = e => {
 		e.preventDefault();
 		const { email, password } = loginData;
-		if (isValidForm()) {
-			dispatch(loginUser(loginData));
-			setLoginData(loginDataInit);
-			setShowPassword(false);
-			setIsSubmit(true);
-		} else {
+
+		if (!isValidForm()) {
 			const isValidData = {
 				isValidEmail:
 					email && validateForm.validateEmail(email) && true,
 				isValidPassword: password && true,
 			};
 			setIsValid(isValidData);
+			return;
 		}
 
-		// console.log(location.pathname);
+		dispatch(loginUser(loginData));
+		setLoginData(loginDataInit);
+		setShowPassword(false);
+		setIsSubmit(true);
 	};
 
 	const handleOnChangeForm = e => {

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
+import {
+	useParams,
+	//  useLocation
+} from 'react-router-dom';
 import {
 	CardDetails,
 	// Video,
-	// HorizontalScrollbar,
 	Loader,
 	HorizontalCard,
-	VerticalScrollbarWithTimeout,
 	Review,
 	BasicVerticalScrollbar,
 } from '../../components';
@@ -47,7 +48,7 @@ const tags = [
 const ExerciseDetail = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
-	const { pathname } = useLocation();
+	// const { pathname } = useLocation();
 	const {
 		selectedExercise,
 		targetMuscleExercises,
@@ -67,20 +68,29 @@ const ExerciseDetail = () => {
 	const [commentValue, setCommentValue] = useState('');
 	const [ratingValue, setRatingValue] = useState(0);
 
+	const [displayTargetMuscleExercises, setDisplayTargetMuscleExercises] =
+		useState([]);
+
+	const [displayEquipmentExercises, setDisplayEquipmentExercises] = useState(
+		[],
+	);
+
 	useEffect(() => {
 		dispatch(resetReviews());
+
 		setSelectedTag(tags[0].value);
 		setCommentValue('');
 		setRatingValue(0);
-
 		dispatch(fetchExerciseById(id));
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, pathname]);
+	}, [
+		id,
+		// pathname
+	]);
 
 	useEffect(
 		() => {
-			console.log('selectedExercise', selectedExercise?._id);
 			dispatch(fetchReviewsLengthByExerciseId(selectedExercise._id));
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,55 +98,71 @@ const ExerciseDetail = () => {
 	);
 
 	useEffect(() => {
+		if (targetMuscleExercises.length > 0) {
+			setDisplayTargetMuscleExercises(targetMuscleExercises.slice(0, 5));
+		}
+	}, [targetMuscleExercises]);
+
+	useEffect(() => {
+		if (equipmentExercises.length > 0) {
+			setDisplayEquipmentExercises(equipmentExercises.slice(0, 5));
+		}
+	}, [equipmentExercises]);
+
+	useEffect(() => {
 		if (selectedExercise.target) {
 			dispatch(fetchExercisesByTargetMuscle(selectedExercise.target));
 		}
+
 		if (selectedExercise.equipment) {
 			dispatch(fetchExercisesByEquiment(selectedExercise.equipment));
 		}
+
 		// if (selectedExercise.name) {
 		// 	dispatch(fetchVideosByTerm(selectedExercise.name));
 		// }
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedExercise]);
+	}, [selectedExercise._id]);
 
 	useEffect(() => {
 		setCommentValue('');
 		setRatingValue(0);
-	}, [reviews]);
+	}, [allReviewsLength]);
 
 	const handleOnTagClick = tag => {
 		setSelectedTag(tag.value);
 	};
 
 	const handleOnCommentClick = () => {
-		if (isAuth) {
-			if (
-				ratingValue > 0 &&
-				ratingValue <= 7 &&
-				commentValue.length > 0
-			) {
-				const review = {
-					description: commentValue,
-					rating: ratingValue,
-				};
-
-				dispatch(
-					createReviewByExerciseId({
-						exerciseId: selectedExercise._id,
-						review,
-					}),
-				);
-			} else {
-				alert('Please fill all fields');
-			}
-		} else {
-			alert('You must be logged in to comment');
+		if (!isAuth) {
+			return alert('You must be logged in to comment');
 		}
+
+		if (ratingValue <= 0 || ratingValue > 7 || commentValue.length <= 0) {
+			return alert('Please fill all fields');
+		}
+
+		const review = {
+			description: commentValue,
+			rating: ratingValue,
+		};
+
+		dispatch(
+			createReviewByExerciseId({
+				exerciseId: selectedExercise._id,
+				review,
+			}),
+		);
 	};
 
 	const handleOnRatingChange = (event, value) => {
 		setRatingValue(value);
+	};
+
+	const handleOnClearClick = () => {
+		setCommentValue('');
+		setRatingValue(0);
 	};
 
 	// const renderVideos =
@@ -145,46 +171,66 @@ const ExerciseDetail = () => {
 	// 		<Video key={`${video.id.videoId}-${i}`} video={video} />
 	// 	));
 
-	const renderTargetMuscleExercises =
-		targetMuscleExercises &&
-		targetMuscleExercises.map((exercise, i) => (
-			<HorizontalCard
-				key={`${exercise.id}-${i}`}
-				exercise={exercise}
-				detailLink={`/exercisedetail/${exercise.id}`}
-				isAuth={isAuth}
-			/>
-		));
+	const renderReviews = reviews.map((review, i) => (
+		<Review key={`${review.id}-${i}`} review={review} />
+	));
 
-	const renderEquipmentExercises =
-		equipmentExercises &&
-		equipmentExercises
-			.slice(0, 11)
-			.map((exercise, i) => (
+	const handleLoadMoreReviews = () => {
+		if (loading) return;
+
+		dispatch(
+			fetchReviewsWithPagination({
+				exerciseId: selectedExercise._id,
+				page: reviews.length / 7 + 1,
+				limit: 7,
+			}),
+		);
+	};
+
+	const handleLoadMoreTargetMuscleExercises = () => {
+		if (exerciseLoading.targetMuscleloading) return;
+
+		setDisplayTargetMuscleExercises(preState => [
+			...preState,
+			...targetMuscleExercises.slice(
+				preState.length,
+				preState.length + 5,
+			),
+		]);
+	};
+
+	const handleLoadMoreEquipmentExercises = () => {
+		if (exerciseLoading.equipmentLoading) return;
+
+		setDisplayEquipmentExercises(preState => [
+			...preState,
+			...equipmentExercises.slice(preState.length, preState.length + 5),
+		]);
+	};
+
+	const renderTargetMuscleExercises = displayTargetMuscleExercises.map(
+		(exercise, i) => {
+			return (
 				<HorizontalCard
 					key={`${exercise.id}-${i}`}
 					exercise={exercise}
 					detailLink={`/exercisedetail/${exercise.id}`}
 					isAuth={isAuth}
 				/>
-			));
-
-	const renderReviews = reviews.map((review, i) => (
-		<Review key={`${review.id}-${i}`} review={review} />
-	));
-
-	const handleLoadMoreItems = () => {
-		console.log('load more');
-		if (!loading) {
-			dispatch(
-				fetchReviewsWithPagination({
-					exerciseId: selectedExercise._id,
-					page: reviews.length / 7 + 1,
-					limit: 7,
-				}),
 			);
-		}
-	};
+		},
+	);
+
+	const renderEquipmentExercises = displayEquipmentExercises.map(
+		(exercise, i) => (
+			<HorizontalCard
+				key={`${exercise.id}-${i}`}
+				exercise={exercise}
+				detailLink={`/exercisedetail/${exercise.id}`}
+				isAuth={isAuth}
+			/>
+		),
+	);
 
 	return (
 		<div className="app__container">
@@ -225,7 +271,7 @@ const ExerciseDetail = () => {
 								</div>
 
 								<div
-									onClick={() => setCommentValue('')}
+									onClick={handleOnClearClick}
 									className="p-text-18"
 								>
 									Clear
@@ -244,7 +290,7 @@ const ExerciseDetail = () => {
 								<BasicVerticalScrollbar
 									length={allReviewsLength}
 									items={renderReviews}
-									handleLoadMoreItems={handleLoadMoreItems}
+									handleLoadMoreItems={handleLoadMoreReviews}
 									loading={loading}
 								/>
 							)}
@@ -281,16 +327,24 @@ const ExerciseDetail = () => {
 						)}
 						{selectedTag === 'similarTargetMuscleExercises' &&
 							(!exerciseLoading.targetMuscleloading ? (
-								<VerticalScrollbarWithTimeout
+								<BasicVerticalScrollbar
+									length={targetMuscleExercises.length}
 									items={renderTargetMuscleExercises}
+									handleLoadMoreItems={
+										handleLoadMoreTargetMuscleExercises
+									}
 								/>
 							) : (
 								<Loader flex={1} />
 							))}
 						{selectedTag === 'similarEquipmentExercises' &&
 							(!exerciseLoading.equipmentLoading ? (
-								<VerticalScrollbarWithTimeout
+								<BasicVerticalScrollbar
+									length={equipmentExercises.length}
 									items={renderEquipmentExercises}
+									handleLoadMoreItems={
+										handleLoadMoreEquipmentExercises
+									}
 								/>
 							) : (
 								<Loader flex={1} />

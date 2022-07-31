@@ -16,6 +16,7 @@ const LoveExercises = () => {
 	);
 	const { userProfile } = useSelector(state => state.user);
 	const { isAuth } = useSelector(state => state.isAuth);
+
 	const [loveExercises, setLoveExercises] = useState([]);
 	const [displayedExercises, setDisplayedExercises] = useState([]);
 
@@ -34,25 +35,25 @@ const LoveExercises = () => {
 	}, [currentPage]);
 
 	useEffect(() => {
-		if (userProfile) {
-			const userLoveExercises = exercises.filter(exercise =>
-				userProfile.loveExercises.includes(exercise._id),
-			);
-			setLoveExercises(userLoveExercises);
-		}
+		if (!userProfile) return;
+
+		const userLoveExercises = exercises.filter(exercise =>
+			userProfile.loveExercises.includes(exercise._id),
+		);
+		setLoveExercises(userLoveExercises);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userProfile, exercises]);
 
 	useEffect(() => {
-		if (loveExercises.length > 0) {
-			const displayedExercises = loveExercises.slice(
-				(currentPage - 1) * 8,
-				currentPage * 8,
-			);
-			setDisplayedExercises(displayedExercises);
-		} else {
-			setDisplayedExercises([]);
-		}
+		if (loveExercises.length <= 0) return setDisplayedExercises([]);
+
+		const displayedExercises = loveExercises.slice(
+			(currentPage - 1) * 8,
+			currentPage * 8,
+		);
+		setDisplayedExercises(displayedExercises);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [loveExercises, currentPage]);
 

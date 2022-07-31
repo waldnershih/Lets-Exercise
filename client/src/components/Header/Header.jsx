@@ -18,12 +18,13 @@ import './Header.scss';
 const whitelist = ['/', '/profile/loveexercises'];
 
 export const Navbar = ({ setIsSidebarOpen }) => {
-	// console.log(isAuth);
 	const dispatch = useDispatch();
+	const location = useLocation();
+
+	const { isAuth } = useSelector(state => state.isAuth);
+
 	const [searchValue, setSearchValue] = useState('');
 	const [anchorEl, setAnchorEl] = useState(null);
-	const { isAuth } = useSelector(state => state.isAuth);
-	const location = useLocation();
 
 	const handleOnChange = e => {
 		setSearchValue(e.target.value);
@@ -130,7 +131,6 @@ export const Tagbar = () => {
 
 	const handleOnTagClick = tag => {
 		dispatch(setCurrentPage(1)); // reset pagination
-
 		setSelectedTag(tag);
 		dispatch(fetchExercisesByTag(tag));
 	};
@@ -158,6 +158,7 @@ export const Divider = () => {
 
 const Header = ({ setIsSidebarOpen }) => {
 	const location = useLocation();
+
 	return (
 		<div className="app__header">
 			<Navbar setIsSidebarOpen={setIsSidebarOpen} />

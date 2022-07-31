@@ -10,38 +10,31 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { userProfile } = useSelector(state => state.user);
+
 	const { bodyPart, gifUrl, name } = exercise;
+
+	const { userProfile } = useSelector(state => state.user);
+
 	const [isSave, setIsSave] = useState(false);
 	const [anchorElMenu, setAnchorElMenu] = useState(null);
 	const [anchorElPopover, setAnchorElPopover] = useState(null);
 
-	const [nameLength, setNameLength] = useState(0);
-
 	useEffect(() => {
-		if (userProfile) {
-			const isMatch = userProfile?.loveExercises.includes(exercise._id);
-			setIsSave(isMatch);
-		} else {
-			setIsSave(false);
-		}
+		if (!userProfile) return setIsSave(false);
+
+		const isMatch = userProfile?.loveExercises.includes(exercise._id);
+		setIsSave(isMatch);
 	}, [userProfile, exercise._id]);
 
-	useEffect(() => {
-		setNameLength(name ? name.length : 0);
-	}, [name]);
-
 	const handleOnSave = e => {
-		if (isAuth) {
-			dispatch(
-				patchUserProfile({
-					loveExercise: exercise._id,
-					field: 'addLoveExercise',
-				}),
-			);
-		} else {
-			setAnchorElMenu(e.currentTarget);
-		}
+		if (!isAuth) return setAnchorElMenu(e.currentTarget);
+
+		dispatch(
+			patchUserProfile({
+				loveExercise: exercise._id,
+				field: 'addLoveExercise',
+			}),
+		);
 	};
 
 	const handleOnUnsave = e => {
@@ -59,8 +52,12 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 	};
 
 	const handleSaveWithoutLogin = () => {
-		navigate('/signin', { state: { from: location } });
+		navigate('/signin', { state: { from: location, userId: 'id' } });
 		setAnchorElMenu(null);
+	};
+
+	const handleOnDetailClick = () => {
+		navigate(detailLink);
 	};
 
 	const menuItems = [
@@ -69,10 +66,6 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 			handleOnClick: handleSaveWithoutLogin,
 		},
 	];
-
-	const handleOnDetailClick = () => {
-		navigate(detailLink);
-	};
 
 	return (
 		<div className="app__basic-card">
@@ -87,7 +80,7 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 				</div>
 			</div>
 			<p className="p-text-18">
-				{nameLength > 22 ? `${name.substring(0, 22)} ...` : name}
+				{name?.length > 22 ? `${name.substring(0, 22)} ...` : name}
 			</p>
 			<div className="basic-card__action-container">
 				{isSave ? (

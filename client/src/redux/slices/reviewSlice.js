@@ -131,7 +131,6 @@ export const reviewSlice = createSlice({
 	initialState: initialReviewState,
 	reducers: {
 		resetReviews: (state, _) => {
-			console.log('resetReviews');
 			state.reviews = [];
 		},
 	},
@@ -193,7 +192,8 @@ export const reviewSlice = createSlice({
 		},
 		[createReviewByExerciseId.fulfilled]: (state, action) => {
 			state.loading = false;
-			state.reviews.push(action.payload);
+			state.reviews = [action.payload, ...state.reviews];
+			state.allReviewsLength += 1;
 			state.success = true;
 		},
 		[createReviewByExerciseId.rejected]: (state, action) => {
@@ -249,6 +249,7 @@ export const reviewSlice = createSlice({
 			state.reviews = state.reviews.filter(review => {
 				return review._id !== action.payload;
 			});
+			state.allReviewsLength -= 1;
 			state.success = true;
 		},
 		[deleteReviewByExerciseId.rejected]: (state, action) => {

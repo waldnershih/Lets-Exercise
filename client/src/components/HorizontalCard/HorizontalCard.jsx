@@ -7,41 +7,34 @@ import { patchUserProfile } from '../../redux/slices/userSlice';
 import { BasicMenu, BasicPopover } from '..';
 
 const HorizontalCard = ({ exercise, detailLink, isAuth }) => {
+	const { bodyPart, gifUrl, name } = exercise;
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
+
 	const { userProfile } = useSelector(state => state.user);
-	const { bodyPart, gifUrl, name } = exercise;
+
 	const [isSave, setIsSave] = useState(false);
 	const [anchorElMenu, setAnchorElMenu] = useState(null);
 	const [anchorElPopover, setAnchorElPopover] = useState(null);
 
-	const [nameLength, setNameLength] = useState(0);
-
 	useEffect(() => {
-		if (userProfile) {
-			const isMatch = userProfile?.loveExercises.includes(exercise._id);
-			setIsSave(isMatch);
-		} else {
-			setIsSave(false);
-		}
+		if (!userProfile) return setIsSave(false);
+
+		const isMatch = userProfile?.loveExercises.includes(exercise._id);
+		setIsSave(isMatch);
 	}, [userProfile, exercise._id]);
 
-	useEffect(() => {
-		setNameLength(name ? name.length : 0);
-	}, [name]);
-
 	const handleOnSave = e => {
-		if (isAuth) {
-			dispatch(
-				patchUserProfile({
-					loveExercise: exercise._id,
-					field: 'addLoveExercise',
-				}),
-			);
-		} else {
-			setAnchorElMenu(e.currentTarget);
-		}
+		if (!isAuth) return setAnchorElMenu(e.currentTarget);
+
+		dispatch(
+			patchUserProfile({
+				loveExercise: exercise._id,
+				field: 'addLoveExercise',
+			}),
+		);
 	};
 
 	const handleOnUnsave = e => {
@@ -63,16 +56,16 @@ const HorizontalCard = ({ exercise, detailLink, isAuth }) => {
 		setAnchorElMenu(null);
 	};
 
+	const handleOnDetailClick = () => {
+		navigate(detailLink);
+	};
+
 	const menuItems = [
 		{
 			label: 'Login for save',
 			handleOnClick: handleSaveWithoutLogin,
 		},
 	];
-
-	const handleOnDetailClick = () => {
-		navigate(detailLink);
-	};
 
 	return (
 		<div className="app__horizontal-card">
@@ -88,7 +81,7 @@ const HorizontalCard = ({ exercise, detailLink, isAuth }) => {
 					</div>
 				</div>
 				<p className="caption-text">
-					{nameLength > 50 ? `${name.substring(0, 50)} ...` : name}
+					{name?.length > 50 ? `${name.substring(0, 50)} ...` : name}
 				</p>
 				<div className="horizontal-card__action-container">
 					{isSave ? (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Popover from '@mui/material/Popover';
 
 import './BasicPopover.scss';
@@ -11,11 +11,12 @@ const BasicPopover = ({
 	handleOnNoClick,
 }) => {
 	const open = Boolean(anchorEl);
-	const id = open ? 'simple-popover' : undefined;
+	const id = useMemo(() => (open ? 'simple-popover' : undefined), [open]);
 
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
 	return (
 		<Popover
 			id={id}

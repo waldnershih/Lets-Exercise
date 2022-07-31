@@ -14,14 +14,12 @@ options.algorithms = ['RS256'];
 const strategy = new JwtStrtegy(options, (payload, done) => {
 	User.findOne({ _id: payload.sub })
 		.then(user => {
-			if (user) {
-				return done(null, user);
-			} else {
-				return done(null, false);
-			}
+			if (user) return done(null, user);
+
+			return done(null, false);
 		})
 		.catch(err => {
-			done(err, null);
+			return done(err, null);
 		});
 });
 

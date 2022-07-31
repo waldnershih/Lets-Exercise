@@ -10,6 +10,7 @@ const BasicVerticalScrollbar = ({ length, handleLoadMoreItems, items }) => {
 		if (items.length < length) {
 			return setHasMore(true);
 		}
+
 		setHasMore(false);
 	}, [items, length]);
 

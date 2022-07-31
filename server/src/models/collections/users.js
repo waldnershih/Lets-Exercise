@@ -26,15 +26,15 @@ const UserSchema = new Schema({
 });
 
 UserSchema.post('findOneAndDelete', async doc => {
-	if (doc) {
-		try {
-			// remove reviews associated with this user
-			await reviewsModel.deleteMany({
-				'owner.ownerId': doc._id.toString(),
-			});
-		} catch (err) {
-			throw { status: 500, message: err.message };
-		}
+	if (!doc) return;
+
+	try {
+		// remove reviews associated with this user
+		await reviewsModel.deleteMany({
+			'owner.ownerId': doc._id.toString(),
+		});
+	} catch (err) {
+		throw { status: 500, message: err.message };
 	}
 });
 

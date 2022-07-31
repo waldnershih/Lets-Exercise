@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { timeAgo } from '../../utils';
 import { Avatar } from '../../assets';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -23,18 +23,15 @@ import './Review.scss';
 const Review = ({ review }) => {
 	const dispatch = useDispatch();
 	const { userProfile } = useSelector(state => state.user);
+	const { selectedExercise } = useSelector(state => state.exercises);
+
 	const [anchorElMenu, setAnchorElMenu] = useState(null);
 	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [reportOpen, setReportOpen] = useState(false);
-	// const [reportReason, setReportReason] = useState('');
 	const [editOpen, setEditOpen] = useState(false);
-	const { selectedExercise } = useSelector(state => state.exercises);
 	const [currentRating, setCurrentRating] = useState(review.rating);
 	const [currentContent, setCurrentContent] = useState(review.description);
-
-	useEffect(() => {
-		// console.log(review);
-	}, [review]);
+	// const [reportReason, setReportReason] = useState('');
 
 	const handleOnAboutClick = e => {
 		setAnchorElMenu(e.currentTarget);
@@ -74,25 +71,24 @@ const Review = ({ review }) => {
 		setEditOpen(false);
 
 		if (
-			currentRating > 0 &&
-			currentRating <= 5 &&
-			currentContent.length > 0
+			currentRating <= 0 ||
+			currentRating > 5 ||
+			currentContent.length <= 0
 		) {
-			const edittedReview = {
-				description: currentContent,
-				rating: currentRating,
-			};
-
-			dispatch(
-				updateReviewByExerciseId({
-					exerciseId: selectedExercise._id,
-					reviewId: review._id,
-					review: edittedReview,
-				}),
-			);
-		} else {
-			alert('Please fill all fields');
+			return alert('Please fill all fields');
 		}
+
+		const edittedReview = {
+			description: currentContent,
+			rating: currentRating,
+		};
+		dispatch(
+			updateReviewByExerciseId({
+				exerciseId: selectedExercise._id,
+				reviewId: review._id,
+				review: edittedReview,
+			}),
+		);
 	};
 
 	const handleOnEditClose = () => {
@@ -161,6 +157,7 @@ const Review = ({ review }) => {
 					<BsThreeDotsVertical onClick={handleOnAboutClick} />
 				</BasicMenu>
 			</div>
+
 			{/* Edit Dialog */}
 			<Dialog
 				open={editOpen}
@@ -168,9 +165,6 @@ const Review = ({ review }) => {
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
 			>
-				{/* <DialogTitle id="alert-dialog-title">
-					{'Are you sure to delete the comment?'}
-				</DialogTitle> */}
 				<DialogContent>
 					<div className="dialog-content">
 						<textarea
@@ -216,6 +210,7 @@ const Review = ({ review }) => {
 					</div>
 				</DialogActions>
 			</Dialog>
+
 			{/* Delete Dialog */}
 			<Dialog
 				open={deleteOpen}
@@ -241,6 +236,7 @@ const Review = ({ review }) => {
 					</div>
 				</DialogActions>
 			</Dialog>
+
 			{/* Report Dialog */}
 			<Dialog
 				open={reportOpen}

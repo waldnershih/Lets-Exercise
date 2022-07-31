@@ -10,35 +10,34 @@ import './CardDetails.scss';
 
 const CardDetails = ({ data }) => {
 	const { _id: id, bodyPart, gifUrl, name, target, equipment } = data;
+
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
-	const [isSave, setIsSave] = useState(false);
-	const [anchorElMenu, setAnchorElMenu] = useState(null);
-	const [anchorElPopover, setAnchorElPopover] = useState(null);
+
 	const { isAuth } = useSelector(state => state.isAuth);
 	const { userProfile } = useSelector(state => state.user);
 
+	const [isSave, setIsSave] = useState(false);
+	const [anchorElMenu, setAnchorElMenu] = useState(null);
+	const [anchorElPopover, setAnchorElPopover] = useState(null);
+
 	useEffect(() => {
-		if (userProfile) {
-			const isMatch = userProfile.loveExercises.includes(id);
-			setIsSave(isMatch);
-		} else {
-			setIsSave(false);
-		}
+		if (!userProfile) return setIsSave(false);
+
+		const isMatch = userProfile.loveExercises.includes(id);
+		setIsSave(isMatch);
 	}, [userProfile, id]);
 
 	const handleOnSave = e => {
-		if (isAuth) {
-			dispatch(
-				patchUserProfile({
-					loveExercise: id,
-					field: 'addLoveExercise',
-				}),
-			);
-		} else {
-			setAnchorElMenu(e.currentTarget);
-		}
+		if (!isAuth) return setAnchorElMenu(e.currentTarget);
+
+		dispatch(
+			patchUserProfile({
+				loveExercise: id,
+				field: 'addLoveExercise',
+			}),
+		);
 	};
 
 	const handleOnUnsave = e => {

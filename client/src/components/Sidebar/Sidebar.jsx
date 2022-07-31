@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from '../../assets';
-// import { GrFormClose } from 'react-icons/gr';
 import { AiOutlineSchedule } from 'react-icons/ai';
 import { CgGym } from 'react-icons/cg';
 import { Divider } from '../Header/Header';

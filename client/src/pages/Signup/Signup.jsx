@@ -26,18 +26,20 @@ const Signup = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
+	const { error, success } = useSelector(state => state.user);
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [registerData, setregisterData] = useState(registerDataInit);
 	const [isValid, setIsValid] = useState(validationInit);
-	const { error, success } = useSelector(state => state.user);
 	const [isSubmit, setIsSubmit] = useState(false);
 
 	useEffect(() => {
-		if (isSubmit && success) {
-			if (location.state?.from) {
-				navigate(location.state.from, { replace: true });
-			}
-		}
+		if (!isSubmit || !success) return;
+
+		if (!location.state?.from) return;
+
+		navigate(location.state.from, { replace: true });
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isSubmit, success, location.state?.from]);
 
@@ -53,12 +55,7 @@ const Signup = () => {
 	const handleOnSubmitForm = e => {
 		e.preventDefault();
 		const { email, password, name } = registerData;
-		if (isValidForm()) {
-			dispatch(registerUser(registerData));
-			setregisterData(registerDataInit);
-			setShowPassword(false);
-			setIsSubmit(true);
-		} else {
+		if (!isValidForm()) {
 			const isValidData = {
 				isValidEmail:
 					email && validateForm.validateEmail(email) && true,
@@ -66,7 +63,13 @@ const Signup = () => {
 				isValidName: name && true,
 			};
 			setIsValid(isValidData);
+			return;
 		}
+
+		dispatch(registerUser(registerData));
+		setregisterData(registerDataInit);
+		setShowPassword(false);
+		setIsSubmit(true);
 	};
 
 	const handleOnChangeForm = e => {

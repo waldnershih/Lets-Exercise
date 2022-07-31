@@ -35,6 +35,7 @@ const RightArrow = () => {
 
 const HorizontalScrollbar = ({ items }) => {
 	const { isAuth } = useSelector(state => state.isAuth);
+
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}

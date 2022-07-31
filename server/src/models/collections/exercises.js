@@ -36,15 +36,15 @@ const ExerciseSchema = new Schema(
 );
 
 ExerciseSchema.post('findOneAndDelete', async doc => {
-	if (doc) {
-		try {
-			// remove reviews associated with this exercise
-			await reviewsModel.deleteMany({
-				exerciseId: doc.id,
-			});
-		} catch (err) {
-			throw { status: 500, message: err.message };
-		}
+	if (!doc) return;
+
+	try {
+		// remove reviews associated with this exercise
+		await reviewsModel.deleteMany({
+			exerciseId: doc.id,
+		});
+	} catch (err) {
+		throw { status: 500, message: err.message };
 	}
 });
 

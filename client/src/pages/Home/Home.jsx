@@ -10,13 +10,14 @@ import {
 import './Home.scss';
 
 const Home = () => {
+	const dispatch = useDispatch();
 	const { currentPage, exercises, loading, error } = useSelector(
 		state => state.exercises,
 	);
 	const { isAuth } = useSelector(state => state.isAuth);
 	const { userProfile } = useSelector(state => state.user);
-	const [unSaveExercise, setUnSaveExercise] = useState(exercises); // home page only show unsaved exercises
-	const dispatch = useDispatch();
+
+	const [unSaveExercises, setUnSaveExercises] = useState(exercises); // home page only show unsaved exercises
 	const [displayedExercises, setDisplayedExercises] = useState([]);
 
 	useEffect(() => {
@@ -32,30 +33,27 @@ const Home = () => {
 	}, [currentPage]);
 
 	useEffect(() => {
-		if (userProfile) {
-			const userUnsaveExercises = exercises.filter(
-				exercise => !userProfile.loveExercises.includes(exercise._id),
-			);
-			setUnSaveExercise(userUnsaveExercises);
-		} else {
-			setUnSaveExercise(exercises);
-		}
+		if (!userProfile) return setUnSaveExercises(exercises);
+
+		const userUnsaveExercises = exercises.filter(
+			exercise => !userProfile.loveExercises.includes(exercise._id),
+		);
+		setUnSaveExercises(userUnsaveExercises);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userProfile, exercises]);
 
 	useEffect(() => {
-		if (unSaveExercise?.length > 0) {
-			const displayedExercises = unSaveExercise.slice(
-				(currentPage - 1) * 8,
-				currentPage * 8,
-			);
-			setDisplayedExercises(displayedExercises);
-		} else {
-			setDisplayedExercises([]);
-		}
+		if (unSaveExercises.length <= 0) return setDisplayedExercises([]);
+
+		const displayedExercises = unSaveExercises.slice(
+			(currentPage - 1) * 8,
+			currentPage * 8,
+		);
+		setDisplayedExercises(displayedExercises);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [unSaveExercise, currentPage]);
+	}, [unSaveExercises, currentPage]);
 
 	const renderCard = displayedExercises.map(exercise => (
 		<BasicCard
@@ -77,9 +75,9 @@ const Home = () => {
 			{!loading.exerciseLoading ? (
 				<div className="app__section app__home">
 					<div className="app__home-card-container">{renderCard}</div>
-					{unSaveExercise && (
+					{unSaveExercises && (
 						<Pagination
-							count={Math.ceil(unSaveExercise?.length / 8)}
+							count={Math.ceil(unSaveExercises.length / 8)}
 						/>
 					)}
 				</div>
