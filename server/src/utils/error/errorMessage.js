@@ -6,7 +6,10 @@ const FAILED_TO_LOGIN = {
 	status: 401,
 	message: 'Password or Email is incorrect',
 };
-const INTERNAL_SERVER_ERROR = { status: 500, message: 'Internal Server Error' };
+const INTERNAL_SERVER_ERROR = {
+	status: 500,
+	message: 'Internal Server Error',
+};
 const UNKNOWN_ERROR = { status: 500, message: 'Unknown error' };
 const MONGO_CONNECTION_ERROR = {
 	status: 500,

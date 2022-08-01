@@ -1,6 +1,8 @@
 import React from 'react';
 import { Menu, MenuItem } from '@mui/material';
 
+import './BasicMenu.scss';
+
 const BasicMenu = ({ children, items, anchorEl, setAnchorEl }) => {
 	const open = Boolean(anchorEl);
 
@@ -20,10 +22,16 @@ const BasicMenu = ({ children, items, anchorEl, setAnchorEl }) => {
 					MenuListProps={{
 						'aria-labelledby': 'basic-button',
 					}}
+					className="basic-menu"
 				>
 					{items.map(item => (
-						<MenuItem key={item.label} onClick={item.handleOnClick}>
-							{item.label}
+						<MenuItem
+							key={item.label}
+							onClick={item.handleOnClick}
+							className="basic-menu__item"
+						>
+							{item.icon}
+							<p className="p-text-16">{item.label}</p>
 						</MenuItem>
 					))}
 				</Menu>

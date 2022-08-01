@@ -1,0 +1,90 @@
+.app__user-info {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	padding: 160px 80px 80px;
+
+	max-width: 1000px;
+
+	.app__user-info__detail-container {
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		flex-direction: column;
+		padding: 15px 0;
+
+		.title {
+			display: flex;
+			align-items: center;
+			margin-bottom: 8px;
+
+			button {
+				margin-left: 15px;
+			}
+			h2 {
+				text-align: left;
+			}
+		}
+	}
+}
+
+.app__user-info__image-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	// padding: 10px 0;
+	img {
+		margin-top: 15px;
+	}
+
+	p {
+		margin-top: 15px;
+	}
+}
+
+.avatar-container {
+	position: relative;
+	margin-bottom: 20px;
+	padding: 0 20px 0 0;
+
+	img {
+		width: 125px;
+		height: 125px;
+		border-radius: 50%;
+	}
+	svg {
+		width: 35px;
+		height: 35px;
+		border-radius: 50%;
+	}
+
+	#icon-tooltip {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+
+	#avatar-image-placeholder__icon {
+		width: 125px;
+		height: 125px;
+		border-radius: 50%;
+		fill: var(--black-color);
+		&:hover {
+			cursor: auto;
+			opacity: 0.8;
+		}
+	}
+}
+
+.app__user-info__input-container {
+	.subHead-text {
+		text-align: left;
+		margin-bottom: 10px;
+		font-weight: 600;
+	}
+	input {
+		width: 100%;
+	}
+}

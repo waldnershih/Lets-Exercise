@@ -7,9 +7,16 @@ import {
 	NotFound,
 	Signin,
 	Signup,
+	UserInfo,
 } from './pages';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { Footer, Header, Sidebar, Protected, ScrollToTop } from './components';
+import {
+	// Footer,
+	Header,
+	Sidebar,
+	Protected,
+	ScrollToTop,
+} from './components';
 import { useLocation } from 'react-router-dom';
 import { setIsAuth } from './redux/slices/isAuthSlice';
 import { fetchUserProfile } from './redux/slices/userSlice';
@@ -71,6 +78,15 @@ const App = () => {
 					/>
 
 					<Route
+						path="/profile/userinfo"
+						element={
+							<Protected>
+								<UserInfo />
+							</Protected>
+						}
+					/>
+
+					<Route
 						path="/exercisedetail/:id"
 						exact
 						element={<ExerciseDetail />}
@@ -80,7 +96,7 @@ const App = () => {
 					<Route path="/404" exact element={<NotFound />} />
 					<Route path="*" element={<Navigate replace to="/404" />} />
 				</Routes>
-				{!blacklist.includes(location.pathname) && <Footer />}
+				{/* {!blacklist.includes(location.pathname) && <Footer />} */}
 			</ScrollToTop>
 		</div>
 	);

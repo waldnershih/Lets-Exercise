@@ -3,6 +3,8 @@ const { UNKNOWN_ERROR } = require('./errorMessage');
 const errorHandler = (err, res, req) => {
 	const { status, message } = err;
 
+	console.log(err);
+
 	switch (status) {
 		case 400:
 		case 401:

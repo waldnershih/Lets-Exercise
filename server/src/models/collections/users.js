@@ -16,6 +16,11 @@ const UserSchema = new Schema({
 		required: true,
 		unique: true,
 	},
+	avatar: {
+		type: Schema.Types.ObjectId,
+		ref: 'images',
+		default: null,
+	},
 	loveExercises: [
 		{
 			type: Schema.Types.ObjectId,

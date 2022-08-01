@@ -252,7 +252,7 @@ const ExerciseDetail = () => {
 							>
 								<b>{allReviewsLength}</b> Comment
 							</h2>
-							<p className="p-text-18">(One Person One Review)</p>
+							{/* <p className="p-text-18">(One Person One Review)</p> */}
 						</div>
 
 						<div className="card-detail-container__comment-container">

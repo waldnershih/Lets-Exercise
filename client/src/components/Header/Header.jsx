@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
 	fetchTagList,
 	fetchExercisesByTag,
@@ -8,10 +9,11 @@ import {
 } from '../../redux/slices/exerciseSlice';
 import { logoutUser } from '../../redux/slices/userSlice';
 import { HiMenuAlt4 } from 'react-icons/hi';
-import { FaHeart } from 'react-icons/fa';
+import { IoMdHeartEmpty } from 'react-icons/io';
 import { FiSearch } from 'react-icons/fi';
+import { CgProfile } from 'react-icons/cg';
+import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { Avatar, Logo } from '../../assets';
-import { Link, useLocation } from 'react-router-dom';
 import { BasicMenu } from '../../components';
 import './Header.scss';
 
@@ -20,6 +22,7 @@ const whitelist = ['/', '/profile/loveexercises'];
 export const Navbar = ({ setIsSidebarOpen }) => {
 	const dispatch = useDispatch();
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	const { isAuth } = useSelector(state => state.isAuth);
 
@@ -39,8 +42,15 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 		setSearchValue('');
 	};
 
+	// menu item functions
+	const handleOnLoveExercisesClick = () => {
+		navigate('/profile/loveexercises');
+		setAnchorEl(null);
+	};
+
 	const handleOnProfileClick = e => {
-		setAnchorEl(e.currentTarget);
+		navigate('/profile/userinfo');
+		setAnchorEl(null);
 	};
 
 	const handleLogout = () => {
@@ -50,7 +60,18 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 
 	const menuItems = [
 		{
+			label: 'Love',
+			icon: <IoMdHeartEmpty />,
+			handleOnClick: handleOnLoveExercisesClick,
+		},
+		{
+			label: 'Profile',
+			icon: <CgProfile />,
+			handleOnClick: handleOnProfileClick,
+		},
+		{
 			label: 'Logout',
+			icon: <RiLogoutBoxRLine />,
 			handleOnClick: handleLogout,
 		},
 	];
@@ -85,12 +106,6 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 			</div>
 
 			<div className="navbar__right-container">
-				{isAuth && (
-					<Link to="/profile/loveexercises">
-						<FaHeart />
-					</Link>
-				)}
-
 				<div className="login-register-avatar">
 					{isAuth ? (
 						<BasicMenu
@@ -101,12 +116,12 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 							<img
 								src={Avatar}
 								alt="Avatar"
-								onClick={handleOnProfileClick}
+								onClick={e => setAnchorEl(e.currentTarget)}
 							/>
 						</BasicMenu>
 					) : (
 						<Link to="/signin" state={{ from: location }}>
-							Login
+							<p className="p-text-18">Login</p>
 						</Link>
 					)}
 				</div>

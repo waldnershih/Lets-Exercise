@@ -89,6 +89,9 @@ export const patchUserProfile = createAsyncThunk(
 				`${baseUserUrl}/profile`,
 				userOptions,
 			);
+
+			console.log(response);
+
 			return response;
 		} catch (error) {
 			throw error;
@@ -129,7 +132,7 @@ export const userSlice = createSlice({
 			state.error = '';
 		},
 		[loginUser.rejected]: (state, action) => {
-			state.error = action.error;
+			state.error = action.error.message;
 			state.loading = false;
 			state.success = false;
 		},
@@ -145,7 +148,7 @@ export const userSlice = createSlice({
 			state.error = '';
 		},
 		[logoutUser.rejected]: (state, action) => {
-			state.error = action.error;
+			state.error = action.error.message;
 			state.loading = false;
 		},
 
@@ -163,7 +166,7 @@ export const userSlice = createSlice({
 			state.error = '';
 		},
 		[registerUser.rejected]: (state, action) => {
-			state.error = action.error;
+			state.error = action.error.message;
 			state.loading = false;
 			state.success = false;
 		},
@@ -178,7 +181,7 @@ export const userSlice = createSlice({
 			state.error = '';
 		},
 		[fetchUserProfile.rejected]: (state, action) => {
-			state.error = action.error;
+			state.error = action.error.message;
 			state.loading = false;
 		},
 		// patch user by id
@@ -193,7 +196,7 @@ export const userSlice = createSlice({
 			state.error = '';
 		},
 		[patchUserProfile.rejected]: (state, action) => {
-			state.error = action.error;
+			state.error = action.error.message;
 			state.success = false;
 			state.loading = false;
 		},
@@ -204,11 +207,10 @@ export const userSlice = createSlice({
 		[deleteUserProfile.fulfilled]: (state, _) => {
 			state.userProfile = {};
 			state.loading = false;
-
 			state.error = '';
 		},
 		[deleteUserProfile.rejected]: (state, action) => {
-			state.error = action.error;
+			state.error = action.error.message;
 			state.loading = false;
 		},
 	},

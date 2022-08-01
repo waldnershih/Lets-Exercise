@@ -22,9 +22,10 @@ const fetchData = async (url, options, type = 'selfServer') => {
 			return await response.json();
 		}
 
-		return;
+		throw response;
 	} catch (err) {
-		console.log(err);
+		const error = await err.text();
+		throw error;
 	}
 };
 
@@ -44,9 +45,10 @@ const postData = async (url, options) => {
 			return await response.json();
 		}
 
-		return;
+		throw response;
 	} catch (err) {
-		console.log(err);
+		const error = await err.text();
+		throw error;
 	}
 };
 
@@ -66,9 +68,10 @@ const putData = async (url, options) => {
 			return await response.json();
 		}
 
-		return;
+		throw response;
 	} catch (err) {
-		console.log(err);
+		const error = await err.text();
+		throw error;
 	}
 };
 
@@ -88,9 +91,10 @@ const patchData = async (url, options) => {
 			return await response.json();
 		}
 
-		return;
+		throw response;
 	} catch (err) {
-		console.log(err);
+		const error = await err.text();
+		throw error;
 	}
 };
 
@@ -108,9 +112,10 @@ const deleteData = async (url, options) => {
 			return await response.json();
 		}
 
-		return;
+		throw response;
 	} catch (err) {
-		console.log(err);
+		const error = await err.text();
+		throw error;
 	}
 };
 

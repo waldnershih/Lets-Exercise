@@ -91,17 +91,42 @@ async function httpGetUserById(req, res, next) {
  */
 async function httpUpdateUserById(req, res, next) {
 	const { _id: id } = req.user;
-	const { email, password, loveExercise, field } = req.body;
+	const { name, email, password, loveExercise, field, avatar } = req.body;
 
 	if (!field) return next(FIELD_MISSING);
 
-	if (field === 'password' || field === 'email') {
-		if (!email && !password) {
+	if (field === 'email') {
+		if (!email) {
 			return next(FIELD_MISSING);
 		}
 
 		try {
-			const updatedUser = await updateUserById(id, { email, password });
+			const updatedUser = await updateUserById(id, { email });
+			return res.status(200).send(updatedUser);
+		} catch (err) {
+			return next(err);
+		}
+	}
+
+	if (field === 'name') {
+		if (!name) {
+			return next(FIELD_MISSING);
+		}
+		try {
+			const updatedUser = await updateUserById(id, { name });
+			return res.status(200).send(updatedUser);
+		} catch (err) {
+			return next(err);
+		}
+	}
+
+	if (field === 'avatar') {
+		if (!avatar) {
+			return next(FIELD_MISSING);
+		}
+
+		try {
+			const updatedUser = await updateUserById(id, { avatar });
 			return res.status(200).send(updatedUser);
 		} catch (err) {
 			return next(err);
@@ -109,6 +134,10 @@ async function httpUpdateUserById(req, res, next) {
 	}
 
 	if (field === 'addLoveExercise' || field === 'removeLoveExercise') {
+		if (!loveExercise) {
+			return next(FIELD_MISSING);
+		}
+
 		try {
 			const updatedUser = await updateUserById(id, {
 				loveExercise,
