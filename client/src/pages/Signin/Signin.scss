@@ -73,9 +73,9 @@
 	.app__signin__form__input__invalid-message {
 		width: 100%;
 		border: 1px solid var(--lightRed-color);
-		cursor: none;
 		background-color: transparent;
 		transition: none;
+
 		.p-text-18 {
 			color: var(--lightRed-color);
 		}

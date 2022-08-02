@@ -24,6 +24,13 @@ const fetchData = async (url, options, type = 'selfServer') => {
 
 		throw response;
 	} catch (err) {
+		if (
+			err.message === 'Timeout' ||
+			err.message === 'Failed to fetch' ||
+			err.message === 'Network error'
+		) {
+			throw err.message;
+		}
 		const error = await err.text();
 		throw error;
 	}
@@ -47,6 +54,14 @@ const postData = async (url, options) => {
 
 		throw response;
 	} catch (err) {
+		if (
+			err.message === 'Timeout' ||
+			err.message === 'Failed to fetch' ||
+			err.message === 'Network error'
+		) {
+			throw err.message;
+		}
+
 		const error = await err.text();
 		throw error;
 	}
@@ -70,6 +85,13 @@ const putData = async (url, options) => {
 
 		throw response;
 	} catch (err) {
+		if (
+			err.message === 'Timeout' ||
+			err.message === 'Failed to fetch' ||
+			err.message === 'Network error'
+		) {
+			throw err.message;
+		}
 		const error = await err.text();
 		throw error;
 	}
@@ -93,6 +115,13 @@ const patchData = async (url, options) => {
 
 		throw response;
 	} catch (err) {
+		if (
+			err.message === 'Timeout' ||
+			err.message === 'Failed to fetch' ||
+			err.message === 'Network error'
+		) {
+			throw err.message;
+		}
 		const error = await err.text();
 		throw error;
 	}
@@ -114,6 +143,13 @@ const deleteData = async (url, options) => {
 
 		throw response;
 	} catch (err) {
+		if (
+			err.message === 'Timeout' ||
+			err.message === 'Failed to fetch' ||
+			err.message === 'Network error'
+		) {
+			throw err.message;
+		}
 		const error = await err.text();
 		throw error;
 	}

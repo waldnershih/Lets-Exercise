@@ -78,8 +78,14 @@ export const fetchExercisesByTargetMuscle = createAsyncThunk(
 	async target => {
 		const targetMuscleExerciseUrl = `${baseExerciseUrl}/target/${target}`;
 		try {
-			return await fetchData(targetMuscleExerciseUrl, exerciseOptions);
+			const res = await fetchData(
+				targetMuscleExerciseUrl,
+				exerciseOptions,
+			);
+			console.log(res);
+			return res;
 		} catch (error) {
+			console.log(error);
 			throw error;
 		}
 	},

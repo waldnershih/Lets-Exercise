@@ -55,6 +55,7 @@ const ExerciseDetail = () => {
 		targetMuscleExercises,
 		equipmentExercises,
 		loading: exerciseLoading,
+		error: exerciseError,
 	} = useSelector(state => state.exercises);
 	// const {
 	// 	videos,
@@ -92,6 +93,8 @@ const ExerciseDetail = () => {
 
 	useEffect(
 		() => {
+			if (!selectedExercise._id) return;
+
 			dispatch(fetchReviewsLengthByExerciseId(selectedExercise._id));
 			dispatch(fetchReviewRatingByExerciseId(selectedExercise._id));
 		},
@@ -132,7 +135,7 @@ const ExerciseDetail = () => {
 		// }
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedExercise._id]);
+	}, [selectedExercise?._id]);
 
 	useEffect(() => {
 		setCommentValue('');
@@ -140,8 +143,11 @@ const ExerciseDetail = () => {
 	}, [allReviewsLength]);
 
 	useEffect(() => {
+		if (allReviewsLength === 0 || !selectedExercise._id) return;
+
 		dispatch(fetchReviewRatingByExerciseId(selectedExercise._id));
-	}, [allReviewsLength, selectedExercise._id, dispatch]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [allReviewsLength, selectedExercise._id]);
 
 	const handleOnTagClick = tag => {
 		setSelectedTag(tag.value);
@@ -190,6 +196,8 @@ const ExerciseDetail = () => {
 
 	const handleLoadMoreReviews = () => {
 		if (loading) return;
+
+		if (!selectedExercise._id) return;
 
 		dispatch(
 			fetchReviewsWithPagination({
@@ -337,19 +345,29 @@ const ExerciseDetail = () => {
 						{selectedTag === 'recommendedVideos' && (
 							<Loader flex={1} />
 						)}
-						{selectedTag === 'similarTargetMuscleExercises' &&
+						{selectedExercise.target &&
+							selectedTag === 'similarTargetMuscleExercises' &&
 							(!exerciseLoading.targetMuscleloading ? (
-								<BasicVerticalScrollbar
-									length={targetMuscleExercises.length}
-									items={renderTargetMuscleExercises}
-									handleLoadMoreItems={
-										handleLoadMoreTargetMuscleExercises
-									}
-								/>
+								!exerciseError.targetMuscleError ? (
+									<BasicVerticalScrollbar
+										length={targetMuscleExercises.length}
+										items={renderTargetMuscleExercises}
+										handleLoadMoreItems={
+											handleLoadMoreTargetMuscleExercises
+										}
+									/>
+								) : (
+									<div className="video-container">
+										<p className="p-text-16">
+											No exercises found
+										</p>
+									</div>
+								)
 							) : (
 								<Loader flex={1} />
 							))}
-						{selectedTag === 'similarEquipmentExercises' &&
+						{selectedExercise.equipment &&
+							selectedTag === 'similarEquipmentExercises' &&
 							(!exerciseLoading.equipmentLoading ? (
 								<BasicVerticalScrollbar
 									length={equipmentExercises.length}

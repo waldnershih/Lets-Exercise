@@ -14,6 +14,10 @@ const initialUsertate = {
 	loading: false,
 	error: '',
 	success: false,
+
+	loginLoading: false,
+	loginError: '',
+	loginSuccess: false,
 };
 
 export const registerUser = createAsyncThunk(
@@ -117,58 +121,64 @@ export const deleteUserProfile = createAsyncThunk(
 export const userSlice = createSlice({
 	name: 'user',
 	initialState: initialUsertate,
-	reducers: {},
+	reducers: {
+		clearLoginError: state => {
+			state.loginError = '';
+		},
+		clearLoginSuccess: state => {
+			state.loginSuccess = false;
+		},
+	},
 	extraReducers: {
 		// login user
 		[loginUser.pending]: (state, _) => {
-			state.loading = true;
-			state.success = false;
+			state.loginLoading = true;
+			state.loginSuccess = false;
+			state.loginError = '';
 		},
 		[loginUser.fulfilled]: (state, action) => {
 			// state.userProfile = action.payload;
 			state.userToken = localStorage.getItem('token');
-			state.loading = false;
-			state.success = true;
-			state.error = '';
+			state.loginLoading = false;
+			state.loginSuccess = true;
+			state.loginError = '';
 		},
 		[loginUser.rejected]: (state, action) => {
-			state.error = action.error.message;
-			state.loading = false;
-			state.success = false;
+			state.loginLoading = false;
+			state.loginSuccess = false;
+			state.loginError = action.error.message;
 		},
 		// logout user
 		[logoutUser.pending]: (state, _) => {
 			state.loading = true;
+			state.success = false;
 		},
 		[logoutUser.fulfilled]: (state, action) => {
-			// state.userProfile = action.payload;
-			state.loading = false;
-			state.userProfile = null;
-			state.userToken = '';
-			state.error = '';
+			state = { ...initialUsertate, userToken: '', success: true };
 		},
 		[logoutUser.rejected]: (state, action) => {
 			state.error = action.error.message;
 			state.loading = false;
+			state.success = false;
 		},
 
 		// register user
 		[registerUser.pending]: (state, _) => {
-			state.loading = true;
-			state.success = false;
+			state.loginLoading = true;
+			state.loginSuccess = false;
+			state.loginError = '';
 		},
 		[registerUser.fulfilled]: (state, action) => {
 			// state.userProfile = action.payload;
 			state.userToken = localStorage.getItem('token');
-			state.loading = false;
-			state.success = true;
-
-			state.error = '';
+			state.loginLoading = false;
+			state.loginSuccess = true;
+			state.loginError = '';
 		},
 		[registerUser.rejected]: (state, action) => {
-			state.error = action.error.message;
-			state.loading = false;
-			state.success = false;
+			state.loginLoading = false;
+			state.loginSuccess = false;
+			state.loginError = action.error.message;
 		},
 		// fetch user by id
 		[fetchUserProfile.pending]: (state, _) => {
@@ -215,5 +225,7 @@ export const userSlice = createSlice({
 		},
 	},
 });
+
+export const { clearLoginError, clearLoginSuccess } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

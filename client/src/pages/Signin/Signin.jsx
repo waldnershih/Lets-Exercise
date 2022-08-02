@@ -4,7 +4,11 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
-import { loginUser } from '../../redux/slices/userSlice';
+import {
+	loginUser,
+	clearLoginError,
+	clearLoginSuccess,
+} from '../../redux/slices/userSlice';
 import { IoIosArrowBack } from 'react-icons/io';
 
 import { validateForm } from '../../utils';
@@ -25,7 +29,7 @@ const Signin = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
-	const { error, success } = useSelector(state => state.user);
+	const { loginError, loginSuccess } = useSelector(state => state.user);
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [loginData, setLoginData] = useState(loginDataInit);
@@ -33,14 +37,21 @@ const Signin = () => {
 	const [isSubmit, setIsSubmit] = useState(false);
 
 	useEffect(() => {
-		if (!isSubmit || !success) return;
+		dispatch(clearLoginError());
+		dispatch(clearLoginSuccess());
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		if (!isSubmit || !loginSuccess) return;
 
 		if (!location.state?.from) return;
 
 		navigate(location.state.from, { replace: true });
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isSubmit, success, location.state?.from]);
+	}, [isSubmit, loginSuccess, location.state?.from]);
 
 	const handleShowPassword = () => {
 		setShowPassword(preState => !preState);
@@ -146,10 +157,10 @@ const Signin = () => {
 						</div>
 					)}
 
-					{error && (
+					{loginError && (
 						<div className="app__signin__form__input">
 							<div className="app__signin__form__input__invalid-message">
-								<p className="p-text-18">{`Error: ${error.toString()}`}</p>
+								<p className="p-text-18">{`Error: ${loginError}`}</p>
 							</div>
 						</div>
 					)}
