@@ -8,7 +8,18 @@ async function getReviewsByExerciseId(id, skip, limit) {
 			.select({ __v: 0 })
 			.sort({ createdAt: -1 })
 			.skip(skip)
-			.limit(limit);
+			.limit(limit)
+			.populate({
+				path: 'owner',
+				select: '-password -email',
+				model: 'users',
+				populate: {
+					path: 'avatar',
+					select: 'base64',
+					model: 'images',
+				},
+			})
+			.exec();
 		return reviews;
 	} catch (err) {
 		throw INTERNAL_SERVER_ERROR;
@@ -18,7 +29,19 @@ async function getReviewsByExerciseId(id, skip, limit) {
 async function createReviewByExerciseId(id, review) {
 	try {
 		const newReview = new reviewModel({ ...review, exerciseId: id });
-		const createdReview = await reviewModel.create(newReview);
+		let createdReview = await reviewModel.create(newReview);
+
+		createdReview = await createdReview.populate({
+			path: 'owner',
+			select: '-password -email',
+			model: 'users',
+			populate: {
+				path: 'avatar',
+				select: 'base64',
+				model: 'images',
+			},
+		});
+
 		return createdReview;
 	} catch (err) {
 		console.log(err);
@@ -28,7 +51,20 @@ async function createReviewByExerciseId(id, review) {
 
 async function getReviewById(id) {
 	try {
-		const review = await reviewModel.findById(id).select({ __v: 0 });
+		const review = await reviewModel
+			.findById(id)
+			.select({ __v: 0 })
+			.populate({
+				path: 'owner',
+				select: '-password -email',
+				model: 'users',
+				populate: {
+					path: 'avatar',
+					select: 'base64',
+					model: 'images',
+				},
+			})
+			.exec();
 		return review;
 	} catch (err) {
 		console.log(err);
@@ -37,10 +73,22 @@ async function getReviewById(id) {
 }
 
 async function updateReviewById(id, review) {
+	console.log(review);
 	try {
 		const updatedReview = await reviewModel
 			.findByIdAndUpdate(id, review, { new: true })
-			.select({ __v: 0 });
+			.select({ __v: 0 })
+			.populate({
+				path: 'owner',
+				select: '-password -email',
+				model: 'users',
+				populate: {
+					path: 'avatar',
+					select: 'base64',
+					model: 'images',
+				},
+			})
+			.exec();
 		return updatedReview;
 	} catch (err) {
 		throw INTERNAL_SERVER_ERROR;

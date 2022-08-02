@@ -27,9 +27,9 @@ async function httpGetReviewsByExerciseId(req, res, next) {
 async function httpCreateReviewByExerciseId(req, res, next) {
 	const { exerciseId } = req.params;
 	const { description, rating } = req.body;
-	const { _id: ownerId, name: ownerName } = req.user;
+	const { _id: ownerId } = req.user;
 
-	if (!description || !rating || !ownerName || !ownerId) {
+	if (!description || !rating || !ownerId) {
 		return next(FIELD_MISSING);
 	}
 
@@ -40,10 +40,7 @@ async function httpCreateReviewByExerciseId(req, res, next) {
 	const review = {
 		description,
 		rating,
-		owner: {
-			ownerId,
-			ownerName,
-		},
+		owner: ownerId,
 	};
 
 	try {
@@ -70,9 +67,8 @@ async function httpGetReviewById(req, res, next) {
 async function httpUpdateReviewById(req, res, next) {
 	const { reviewId } = req.params;
 	const { description, rating } = req.body;
-	const { _id: ownerId, name: ownerName } = req.user;
 
-	if (!description || !rating || !ownerName || !ownerId) {
+	if (!description || !rating) {
 		return next(FIELD_MISSING);
 	}
 
@@ -83,10 +79,6 @@ async function httpUpdateReviewById(req, res, next) {
 	const review = {
 		description,
 		rating,
-		owner: {
-			ownerId,
-			ownerName,
-		},
 	};
 
 	try {

@@ -14,15 +14,9 @@ const ReviewSchema = new Schema(
 			required: true,
 		},
 		owner: {
-			ownerId: {
-				type: String,
-				required: true,
-				// unique: true,
-			},
-			ownerName: {
-				type: String,
-				required: true,
-			},
+			type: Schema.Types.ObjectId,
+			ref: 'User',
+			required: true,
 		},
 		// id retrieved from exerciseDB API, eg: '0001'
 		exerciseId: {
