@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
+const helmet = require('helmet');
 const LocalStrategy = require('passport-local');
 const passportConfigJWT = require('./config/passport');
 const User = require('./models/collections/users');
@@ -32,6 +33,8 @@ passportConfigJWT(passport);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(helmet());
 
 app.use('/v1', api);
 

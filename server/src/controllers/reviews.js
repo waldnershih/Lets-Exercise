@@ -8,13 +8,13 @@ const {
 } = require('../models/services/reviews');
 const { getPagination } = require('../utils/query');
 const { BAD_REQUEST, FIELD_MISSING } = require('../utils/error');
-const { delay } = require('../utils/delay');
+// const { delay } = require('../utils/delay');
 
 async function httpGetReviewsByExerciseId(req, res, next) {
 	const { skip, limit } = getPagination(req.query);
 	const { exerciseId } = req.params;
 
-	delay(500);
+	// delay(500);
 
 	try {
 		const reviews = await getReviewsByExerciseId(exerciseId, skip, limit);

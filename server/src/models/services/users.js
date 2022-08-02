@@ -148,7 +148,10 @@ async function addLoveExercise(id, loveExercise) {
 		const user = await userModel.findById(id);
 		user.loveExercises.push(loveExercise);
 
-		return await user.save();
+		let savedUser = await user.save();
+		savedUser = await savedUser.populate('avatar');
+
+		return savedUser;
 	} catch (err) {
 		console.log(err);
 		throw INTERNAL_SERVER_ERROR;
@@ -159,8 +162,12 @@ async function removeLoveExercise(id, loveExerciseId) {
 	try {
 		const user = await userModel.findById(id);
 		user.loveExercises.pull(loveExerciseId);
-		return await user.save();
+		let savedUser = await user.save();
+		savedUser = await savedUser.populate('avatar');
+
+		return savedUser;
 	} catch (err) {
+		console.log(err);
 		throw INTERNAL_SERVER_ERROR;
 	}
 }
