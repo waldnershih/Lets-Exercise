@@ -2,17 +2,17 @@
 
 ## Url
 
--   [APP](https://lets-exercise.netlify.app/)
+-   unavailable yet
 
 ## Arch
 
 -   client
 
-    -   react/ scss/ redux-tookit/ exerciseDB api/ youtube api
+    -   react/ scss/ mui/ redux-tookit/ exerciseDB api/ youtube api
 
 -   server
 
-    -   nodejs/ express/ dockerfile/ jwt
+    -   nodejs/ express/ jwt/ dockerfile(not yet)
 
 -   db
     - MongoDB
