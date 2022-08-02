@@ -37,7 +37,6 @@ async function getUserById(id) {
 
 async function updateUserById(id, profile) {
 	const { avatar, name, email, loveExercise, field } = profile;
-	console.log(profile);
 
 	if (email) {
 		return await updateUserEmail(id, email);
@@ -92,6 +91,10 @@ async function updateUserName(id, name) {
 			.exec();
 		return user;
 	} catch (err) {
+		console.log(err);
+		if (err.code && err.code === 11000) {
+			throw ALREADY_EXISTS;
+		}
 		throw INTERNAL_SERVER_ERROR;
 	}
 }
@@ -105,6 +108,14 @@ async function updateUserEmail(id, email) {
 			.exec();
 		return user;
 	} catch (err) {
+		if (
+			(err.code && err.code === 11000) ||
+			(err.message &&
+				err.message ===
+					'A user with the given username is already registered')
+		) {
+			throw ALREADY_EXISTS;
+		}
 		throw INTERNAL_SERVER_ERROR;
 	}
 }
@@ -136,7 +147,7 @@ async function addLoveExercise(id, loveExercise) {
 	try {
 		const user = await userModel.findById(id);
 		user.loveExercises.push(loveExercise);
-		console.log(user);
+
 		return await user.save();
 	} catch (err) {
 		console.log(err);

@@ -73,7 +73,6 @@ async function getReviewById(id) {
 }
 
 async function updateReviewById(id, review) {
-	console.log(review);
 	try {
 		const updatedReview = await reviewModel
 			.findByIdAndUpdate(id, review, { new: true })

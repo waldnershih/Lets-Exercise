@@ -54,9 +54,8 @@ async function saveExercise(data) {
 			},
 			{ upsert: true }, // only insert if not exists
 		);
-		console.log('exercise saved');
 	} catch (err) {
-		console.log(`Could not save exercises ${err}`);
+		console.log(err);
 		throw INTERNAL_SERVER_ERROR;
 	}
 }

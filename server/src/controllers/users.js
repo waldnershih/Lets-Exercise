@@ -19,7 +19,6 @@ const {
  * @param {*} next
  */
 async function httpLoginUser(req, res, next) {
-	console.log(req.body);
 	passport.authenticate('local', { session: false }, (err, user, info) => {
 		if (err) {
 			console.log(err);
@@ -52,7 +51,6 @@ async function httpLoginUser(req, res, next) {
  */
 async function httpRegisterUser(req, res, next) {
 	const { name, email, password } = req.body;
-	console.log(req.body);
 
 	if (!name || !email || !password) {
 		return next(FIELD_MISSING);
