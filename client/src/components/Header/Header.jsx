@@ -13,7 +13,8 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { FiSearch } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
-import { Avatar, Logo } from '../../assets';
+import { Logo } from '../../assets';
+import { BiUserCircle } from 'react-icons/bi';
 import { BasicMenu } from '../../components';
 import './Header.scss';
 
@@ -25,6 +26,7 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 	const navigate = useNavigate();
 
 	const { isAuth } = useSelector(state => state.isAuth);
+	const { userProfile } = useSelector(state => state.user);
 
 	const [searchValue, setSearchValue] = useState('');
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -113,11 +115,22 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 							anchorEl={anchorEl}
 							setAnchorEl={setAnchorEl}
 						>
-							<img
-								src={Avatar}
-								alt="Avatar"
-								onClick={e => setAnchorEl(e.currentTarget)}
-							/>
+							{!userProfile ? null : userProfile.avatar ? (
+								<div className="login-register-avatar__image-container">
+									<img
+										src={userProfile.avatar?.base64}
+										alt="avatar"
+										onClick={e =>
+											setAnchorEl(e.currentTarget)
+										}
+									/>
+								</div>
+							) : (
+								<BiUserCircle
+									onClick={e => setAnchorEl(e.currentTarget)}
+									className="login-register-avatar__default-icon"
+								/>
+							)}
 						</BasicMenu>
 					) : (
 						<Link to="/signin" state={{ from: location }}>

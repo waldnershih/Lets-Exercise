@@ -40,6 +40,7 @@ export const fetchAllReviewsByExerciseId = createAsyncThunk(
 		delete reviewsOptions.body;
 		try {
 			const response = await fetchData(reviewsUrl, reviewsOptions);
+
 			return response;
 		} catch (error) {
 			throw error;
@@ -98,7 +99,6 @@ export const updateReviewByExerciseId = createAsyncThunk(
 	'reviews/updateReviewByExerciseId',
 	// data: {exerciseId, reviewId, review}
 	async data => {
-		console.log(data);
 		const { exerciseId, reviewId, review } = data;
 		const reviewsUrl = `${baseReviewsUrl}/${exerciseId}/reviews/review/${reviewId}`;
 		reviewsOptions.body = JSON.stringify(review);
@@ -139,11 +139,13 @@ export const reviewSlice = createSlice({
 		[fetchReviewsLengthByExerciseId.pending]: (state, _) => {
 			state.lengthLoading = true;
 			state.lengthSuccess = true;
+			state.lengthError = '';
 		},
 		// fetch reviews length
 		[fetchReviewsLengthByExerciseId.fulfilled]: (state, action) => {
 			state.lengthLoading = false;
 			state.lengthSuccess = true;
+			state.lengthError = '';
 			state.allReviewsLength = action.payload;
 		},
 		// fetch reviews length
@@ -157,11 +159,13 @@ export const reviewSlice = createSlice({
 		[fetchAllReviewsByExerciseId.pending]: (state, _) => {
 			state.loading = true;
 			state.success = false;
+			state.error = '';
 		},
 		[fetchAllReviewsByExerciseId.fulfilled]: (state, action) => {
 			state.loading = false;
 			state.reviews = action.payload;
 			state.success = true;
+			state.error = '';
 		},
 		[fetchAllReviewsByExerciseId.rejected]: (state, action) => {
 			state.loading = false;
@@ -173,11 +177,13 @@ export const reviewSlice = createSlice({
 		[fetchReviewsWithPagination.pending]: (state, _) => {
 			state.loading = true;
 			state.success = false;
+			state.error = '';
 		},
 		[fetchReviewsWithPagination.fulfilled]: (state, action) => {
 			state.loading = false;
 			state.reviews.push(...action.payload);
 			state.success = true;
+			state.error = '';
 		},
 		[fetchReviewsWithPagination.rejected]: (state, action) => {
 			state.loading = false;
@@ -189,12 +195,14 @@ export const reviewSlice = createSlice({
 		[createReviewByExerciseId.pending]: (state, _) => {
 			state.loading = true;
 			state.success = false;
+			state.error = '';
 		},
 		[createReviewByExerciseId.fulfilled]: (state, action) => {
 			state.loading = false;
 			state.reviews = [action.payload, ...state.reviews];
 			state.allReviewsLength += 1;
 			state.success = true;
+			state.error = '';
 		},
 		[createReviewByExerciseId.rejected]: (state, action) => {
 			state.loading = false;
@@ -206,11 +214,13 @@ export const reviewSlice = createSlice({
 		[fetchReviewByExerciseId.pending]: (state, _) => {
 			state.loading = true;
 			state.success = false;
+			state.error = '';
 		},
 		[fetchReviewByExerciseId.fulfilled]: (state, action) => {
 			state.loading = false;
 			state.selectedReview = action.payload;
 			state.success = true;
+			state.error = '';
 		},
 		[fetchReviewByExerciseId.rejected]: (state, action) => {
 			state.loading = false;
@@ -222,6 +232,7 @@ export const reviewSlice = createSlice({
 		[updateReviewByExerciseId.pending]: (state, _) => {
 			state.loading = true;
 			state.success = false;
+			state.error = '';
 		},
 		[updateReviewByExerciseId.fulfilled]: (state, action) => {
 			state.loading = false;
@@ -232,6 +243,7 @@ export const reviewSlice = createSlice({
 				return review;
 			});
 			state.success = true;
+			state.error = '';
 		},
 		[updateReviewByExerciseId.rejected]: (state, action) => {
 			state.loading = false;
@@ -243,6 +255,7 @@ export const reviewSlice = createSlice({
 		[deleteReviewByExerciseId.pending]: (state, _) => {
 			state.loading = true;
 			state.success = false;
+			state.error = '';
 		},
 		[deleteReviewByExerciseId.fulfilled]: (state, action) => {
 			state.loading = false;
@@ -251,6 +264,7 @@ export const reviewSlice = createSlice({
 			});
 			state.allReviewsLength -= 1;
 			state.success = true;
+			state.error = '';
 		},
 		[deleteReviewByExerciseId.rejected]: (state, action) => {
 			state.loading = false;

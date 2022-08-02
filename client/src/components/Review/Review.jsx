@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { timeAgo } from '../../utils';
-import { Avatar } from '../../assets';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { BiUserCircle } from 'react-icons/bi';
 import { BasicMenu } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -22,16 +22,25 @@ import './Review.scss';
 
 const Review = ({ review }) => {
 	const dispatch = useDispatch();
-	const { userProfile } = useSelector(state => state.user);
+
+	const { userProfile, loading } = useSelector(state => state.user);
 	const { selectedExercise } = useSelector(state => state.exercises);
+	const { error } = useSelector(state => state.reviews);
 
 	const [anchorElMenu, setAnchorElMenu] = useState(null);
 	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [reportOpen, setReportOpen] = useState(false);
 	const [editOpen, setEditOpen] = useState(false);
-	const [currentRating, setCurrentRating] = useState(review.rating);
-	const [currentContent, setCurrentContent] = useState(review.description);
+	const [currentRating, setCurrentRating] = useState(review?.rating);
+	const [currentContent, setCurrentContent] = useState(review?.description);
 	// const [reportReason, setReportReason] = useState('');
+
+	useEffect(() => {
+		if (!error) return;
+
+		setCurrentContent(review.description);
+		setCurrentRating(review.rating);
+	}, [error, review]);
 
 	const handleOnAboutClick = e => {
 		setAnchorElMenu(e.currentTarget);
@@ -119,12 +128,22 @@ const Review = ({ review }) => {
 
 	return (
 		<div className="app__review">
-			{/* <img src={review.owner.avatar} alt="avatar" /> */}
-			<img src={Avatar} alt="avatar" className="app__review__avatar" />
+			{loading ? (
+				<BiUserCircle className="app__review__avatar" />
+			) : userProfile?.avatar ? (
+				<img
+					src={review.owner?.avatar?.base64}
+					alt="avatar"
+					className="app__review__avatar"
+				/>
+			) : (
+				<BiUserCircle className="app__review__avatar" />
+			)}
+
 			<div className="app__review__info">
 				<div className="app__review__info-title">
 					<p className="p-text-18 app__review__info__author">
-						{review.owner.ownerName}
+						{review.owner.name}
 					</p>
 				</div>
 				<div className="app__review__info-subtitle">
@@ -147,7 +166,7 @@ const Review = ({ review }) => {
 			<div className="app__review__actions">
 				<BasicMenu
 					items={
-						userProfile?._id === review?.owner?.ownerId
+						userProfile?._id === review?.owner?._id
 							? menuItems
 							: [menuItems[2]]
 					}

@@ -111,7 +111,7 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	margin-right: 15px;
+	// margin-right: 15px;
 
 	a {
 		text-decoration: none;
@@ -124,7 +124,24 @@
 			opacity: 1;
 		}
 	}
+	.login-register-avatar__image-container {
+		height: 40px;
+		width: 40px;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+	.login-register-avatar__default-icon {
+		margin: 0;
+	}
+
 	img {
+		width: 100%;
+		height: 100%;
+		object-fit: fill;
+	}
+
+	svg {
 		height: 40px;
 		width: 40px;
 		&:hover {

@@ -99,6 +99,13 @@ const ExerciseDetail = () => {
 		[selectedExercise?._id],
 	);
 
+	// useEffect(() => {
+	// 	if (!error) return;
+
+	// 	setCommentValue('');
+	// 	setRatingValue(0);
+	// }, [error]);
+
 	useEffect(() => {
 		if (targetMuscleExercises.length > 0) {
 			setDisplayTargetMuscleExercises(targetMuscleExercises.slice(0, 5));
@@ -178,7 +185,7 @@ const ExerciseDetail = () => {
 	// 	));
 
 	const renderReviews = reviews.map((review, i) => (
-		<Review key={`${review.id}-${i}`} review={review} />
+		<Review key={`${review._id}-${i}`} review={review} />
 	));
 
 	const handleLoadMoreReviews = () => {
@@ -187,7 +194,7 @@ const ExerciseDetail = () => {
 		dispatch(
 			fetchReviewsWithPagination({
 				exerciseId: selectedExercise._id,
-				page: reviews.length / 7 + 1,
+				page: Math.ceil(reviews.length / 7) + 1,
 				limit: 7,
 			}),
 		);
@@ -252,7 +259,6 @@ const ExerciseDetail = () => {
 							>
 								<b>{allReviewsLength}</b> Comment
 							</h2>
-							{/* <p className="p-text-18">(One Person One Review)</p> */}
 						</div>
 
 						<div className="card-detail-container__comment-container">
