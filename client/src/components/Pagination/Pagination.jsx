@@ -23,6 +23,11 @@ const CustomisePagination = ({ count }) => {
 					defaultValue={1}
 					showFirstButton
 					showLastButton
+					sx={{
+						button: {
+							margin: '2px',
+						},
+					}}
 				/>
 			</ThemeProvider>
 		</div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BasicCard, Pagination } from '../../components';
+import { BasicCard, Pagination, Error } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
@@ -11,7 +11,7 @@ import './LoveExercises.scss';
 
 const LoveExercises = () => {
 	const dispatch = useDispatch();
-	const { currentPage, exercises, loading } = useSelector(
+	const { currentPage, exercises, loading, error } = useSelector(
 		state => state.exercises,
 	);
 	const { userProfile } = useSelector(state => state.user);
@@ -68,13 +68,20 @@ const LoveExercises = () => {
 
 	return (
 		<div className="app__container">
-			{!loading.exerciseLoading ? (
+			{error.exerciseError ? (
+				<div className="app__section app__love-exercise">
+					<Error />
+				</div>
+			) : !loading.exerciseLoading ? (
 				<div className="app__section app__love-exercise">
 					<div className="app__love-exercise__card-container">
 						{renderCard}
 					</div>
-
-					<Pagination count={Math.ceil(loveExercises.length / 8)} />
+					{loveExercises && (
+						<Pagination
+							count={Math.ceil(loveExercises.length / 8)}
+						/>
+					)}
 				</div>
 			) : (
 				<div className="app__section app__love-exercise">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { BasicMenu, BasicPopover } from '../../components/';
+import { BasicPopover } from '../../components/';
 import { patchUserProfile } from '../../redux/slices/userSlice';
 import Rating from '@mui/material/Rating';
 
@@ -60,37 +60,37 @@ const CardDetails = ({ data }) => {
 		setAnchorElMenu(null);
 	};
 
-	const menuItems = [
-		{
-			label: 'Login for save',
-			handleOnClick: handleSaveWithoutLogin,
-		},
-	];
-
 	return (
 		<div className="app__card-details">
 			<img src={gifUrl} alt="sample" />
-			<div className="tags-container">
-				<div className={`tag-container__box app--lightgreenbg`}>
+			<div className="app__card-details__tags-container">
+				<div
+					className={`app__card-details__tag-container__box app--lightgreenbg`}
+				>
 					<p className="p-text-16">{bodyPart}</p>
 				</div>
-				<div className={`tag-container__box app--lightpurplebg`}>
+				<div
+					className={`app__card-details__tag-container__box app--lightpurplebg`}
+				>
 					<p className="p-text-16">{target}</p>
 				</div>
-				<div className={`tag-container__box app--lightyellowbg`}>
+				<div
+					className={`app__card-details__tag-container__box app--lightyellowbg`}
+				>
 					<p className="p-text-16">{equipment}</p>
 				</div>
-				<div>
-					<BasicMenu
-						items={menuItems}
+				<div className="heart-box">
+					<FaHeart
+						className={isSave && `yellow-icon`}
+						onClick={isSave ? handleOnUnsave : handleOnSave}
+					/>
+					<BasicPopover
 						anchorEl={anchorElMenu}
 						setAnchorEl={setAnchorElMenu}
-					>
-						<FaHeart
-							className={isSave && `yellow-icon`}
-							onClick={isSave ? handleOnUnsave : handleOnSave}
-						/>
-					</BasicMenu>
+						title="Login for save"
+						handleOnYesClick={handleSaveWithoutLogin}
+						handleOnNoClick={() => setAnchorElMenu(null)}
+					/>
 					<BasicPopover
 						anchorEl={anchorElPopover}
 						setAnchorEl={setAnchorElPopover}
@@ -99,7 +99,7 @@ const CardDetails = ({ data }) => {
 						handleOnNoClick={() => setAnchorElPopover(null)}
 					/>
 				</div>
-				<div className="tags-container__rating-box">
+				<div className="app__card-details__tags-container__rating-box">
 					<Rating
 						name="half-rating-read"
 						// defaultValue={reviewRating}

@@ -1,18 +1,35 @@
-.cancel-icon {
-	height: 32px;
-	width: 32px;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-}
-
-.header {
+.sidebar__header {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	.logo-container {
+	.sidebar__header__logo-container {
 		img {
 			width: 180px;
+		}
+		@media screen and (max-width: 1200px) {
+			img {
+				width: 160px;
+			}
+		}
+		@media screen and (max-width: 599px) {
+			img {
+				width: 120px;
+			}
+		}
+	}
+}
+
+.sidebar__content {
+	.p-text-18 {
+		@media screen and (max-width: 599px) {
+			font-size: 14px;
+			line-height: 22px;
+		}
+	}
+	svg {
+		@media screen and (max-width: 500px) {
+			height: 20px;
+			width: 20px;
 		}
 	}
 }

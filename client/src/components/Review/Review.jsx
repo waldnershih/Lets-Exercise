@@ -128,17 +128,16 @@ const Review = ({ review }) => {
 
 	return (
 		<div className="app__review">
-			{loading ? (
-				<BiUserCircle className="app__review__avatar" />
-			) : userProfile?.avatar ? (
-				<img
-					src={review.owner?.avatar?.base64}
-					alt="avatar"
-					className="app__review__avatar"
-				/>
-			) : (
-				<BiUserCircle className="app__review__avatar" />
-			)}
+			{!loading &&
+				(review.owner?.avatar ? (
+					<img
+						src={review.owner?.avatar?.base64}
+						alt="avatar"
+						className="app__review__avatar"
+					/>
+				) : (
+					<BiUserCircle className="app__review__avatar" />
+				))}
 
 			<div className="app__review__info">
 				<div className="app__review__info-title">

@@ -154,7 +154,14 @@ export const userSlice = createSlice({
 			state.success = false;
 		},
 		[logoutUser.fulfilled]: (state, action) => {
-			state = { ...initialUsertate, userToken: '', success: true };
+			state.userToken = '';
+			state.loading = false;
+			state.success = true;
+			state.userProfile = null;
+			state.error = '';
+			state.loginLoading = false;
+			state.loginSuccess = false;
+			state.loginError = '';
 		},
 		[logoutUser.rejected]: (state, action) => {
 			state.error = action.error.message;

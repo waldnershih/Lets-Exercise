@@ -4,7 +4,7 @@ import './BasicCard.scss';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { patchUserProfile } from '../../redux/slices/userSlice';
-import { BasicMenu, BasicPopover } from '../../components';
+import { BasicPopover } from '../../components';
 
 const BasicCard = ({ exercise, detailLink, isAuth }) => {
 	const dispatch = useDispatch();
@@ -60,13 +60,6 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 		navigate(detailLink);
 	};
 
-	const menuItems = [
-		{
-			label: 'Login for save',
-			handleOnClick: handleSaveWithoutLogin,
-		},
-	];
-
 	return (
 		<div className="app__basic-card">
 			<div className="basic-card__image-container">
@@ -97,15 +90,18 @@ const BasicCard = ({ exercise, detailLink, isAuth }) => {
 						/>
 					</div>
 				) : (
-					<BasicMenu
-						items={menuItems}
-						anchorEl={anchorElMenu}
-						setAnchorEl={setAnchorElMenu}
-					>
+					<div>
 						<p className="p-text-16" onClick={handleOnSave}>
 							Save
 						</p>
-					</BasicMenu>
+						<BasicPopover
+							anchorEl={anchorElMenu}
+							setAnchorEl={setAnchorElMenu}
+							title="Login for save"
+							handleOnYesClick={handleSaveWithoutLogin}
+							handleOnNoClick={() => setAnchorElMenu(null)}
+						/>
+					</div>
 				)}
 
 				{detailLink && (

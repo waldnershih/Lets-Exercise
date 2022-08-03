@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Logo } from '../../assets';
 import { AiOutlineSchedule } from 'react-icons/ai';
 import { CgGym } from 'react-icons/cg';
@@ -16,22 +16,46 @@ import {
 	Toolbar,
 } from '@mui/material';
 
+import { useDispatch } from 'react-redux';
+
+import {
+	fetchExercisesByTag,
+	setCurrentPage,
+} from '../../redux/slices/exerciseSlice';
+
 import './Sidebar.scss';
 
-const routes = [
-	{
-		icon: <CgGym />,
-		title: 'Exercise',
-		path: '/',
-	},
-	{
-		icon: <AiOutlineSchedule />,
-		title: 'Schedule',
-		path: '/schedule',
-	},
-];
-
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const handleOnExerciseClick = () => {
+		dispatch(fetchExercisesByTag('all'));
+		dispatch(setCurrentPage(1));
+		navigate('/');
+		setIsSidebarOpen(preState => !preState);
+	};
+
+	const handleOnScheduleClick = () => {
+		navigate('/schedule');
+		setIsSidebarOpen(preState => !preState);
+	};
+
+	const routes = [
+		{
+			icon: <CgGym />,
+			title: 'Exercise',
+			path: '/',
+			handleOnClick: handleOnExerciseClick,
+		},
+		{
+			icon: <AiOutlineSchedule />,
+			title: 'Schedule',
+			path: '/schedule',
+			handleOnClick: handleOnScheduleClick,
+		},
+	];
+
 	return (
 		<Drawer
 			anchor="left"
@@ -40,18 +64,14 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		>
 			<Box
 				sx={{
-					width: 250,
+					width: [200, 250],
 				}}
 				role="presentation"
 				onClick={() => setIsSidebarOpen(false)}
 				onKeyDown={() => setIsSidebarOpen(false)}
 			>
-				<Toolbar className="header">
-					{/* <GrFormClose
-						onClick={() => setIsSidebarOpen(false)}
-						className="cancel-icon"
-					/> */}
-					<div className="logo-container">
+				<Toolbar className="sidebar__header">
+					<div className="sidebar__header__logo-container">
 						<img src={Logo} alt="Logo" />
 					</div>
 				</Toolbar>
@@ -59,23 +79,20 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				<Divider />
 				<List>
 					{routes.map(route => (
-						<Link
-							to={route.path}
-							onClick={() =>
-								setIsSidebarOpen(preState => !preState)
-							}
+						<ListItem
+							disablePadding
+							className="sidebar__content"
 							key={route.title}
+							onClick={route.handleOnClick}
 						>
-							<ListItem disablePadding>
-								<ListItemButton>
-									<ListItemIcon>{route.icon}</ListItemIcon>
-									<ListItemText
-										primary={route.title}
-										className="p-text-18"
-									/>
-								</ListItemButton>
-							</ListItem>
-						</Link>
+							<ListItemButton>
+								<ListItemIcon>{route.icon}</ListItemIcon>
+								<ListItemText
+									primary={route.title}
+									className="p-text-18"
+								/>
+							</ListItemButton>
+						</ListItem>
 					))}
 				</List>
 			</Box>

@@ -27,6 +27,7 @@ export const fetchVideosByTerm = createAsyncThunk(
 
 			return response.items;
 		} catch (error) {
+			console.log(error);
 			throw error;
 		}
 	},

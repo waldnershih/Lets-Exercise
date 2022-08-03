@@ -8,7 +8,7 @@
 // 	},
 // };
 
-export const baseExerciseUrl = 'http://localhost:8000/v1/exercises';
+export const baseExerciseUrl = '/exercises';
 export const exerciseOptions = {
 	headers: {
 		'Access-Control-Allow-Origin': '*',

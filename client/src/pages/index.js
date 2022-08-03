@@ -5,6 +5,7 @@ import LoveExercises from './LoveExercises/LoveExercises';
 import Signin from './Signin/Signin';
 import Signup from './Signup/Signup';
 import UserInfo from './UserInfo/UserInfo';
+import Schedule from './Schedule/Schedule';
 
 export {
 	Home,
@@ -14,4 +15,5 @@ export {
 	Signup,
 	LoveExercises,
 	UserInfo,
+	Schedule,
 };

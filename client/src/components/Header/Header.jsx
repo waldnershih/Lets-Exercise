@@ -60,6 +60,12 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 		setAnchorEl(null);
 	};
 
+	const handleOnLogoClick = () => {
+		dispatch(fetchExercisesByTag('all'));
+		dispatch(setCurrentPage(1));
+		navigate('/');
+	};
+
 	const menuItems = [
 		{
 			label: 'Love',
@@ -82,11 +88,10 @@ export const Navbar = ({ setIsSidebarOpen }) => {
 		<div className="navbar">
 			<div className="navbar__left-container">
 				<HiMenuAlt4 onClick={handMenuOnClick} />
-				<Link to="/">
-					<div>
-						<img src={Logo} alt="Logo" />
-					</div>
-				</Link>
+
+				<div onClick={handleOnLogoClick} className="navbar__logo-box">
+					<img src={Logo} alt="Logo" />
+				</div>
 			</div>
 
 			<div className="navbar__middle-container">
@@ -164,11 +169,11 @@ export const Tagbar = () => {
 	};
 
 	return (
-		<div className="tagbar">
+		<div className="app__header__tagbar">
 			{tags.map(tag => (
 				<div
 					key={tag}
-					className={`tagbar__container ${
+					className={`app__header__tagbar__container ${
 						selectedTag === tag ? 'app--darkskinbg' : 'app--skinbg'
 					}`}
 					onClick={() => handleOnTagClick(tag)}
@@ -185,14 +190,19 @@ export const Divider = () => {
 };
 
 const Header = ({ setIsSidebarOpen }) => {
+	const { error } = useSelector(state => state.exercises);
+
 	const location = useLocation();
 
 	return (
 		<div className="app__header">
 			<Navbar setIsSidebarOpen={setIsSidebarOpen} />
-			<Divider />
-			{whitelist.includes(location.pathname) && <Tagbar />}
-			{whitelist.includes(location.pathname) && <Divider />}
+			{whitelist.includes(location.pathname) && !error.tagListError && (
+				<Divider />
+			)}
+			{whitelist.includes(location.pathname) && !error.tagListError && (
+				<Tagbar />
+			)}
 		</div>
 	);
 };

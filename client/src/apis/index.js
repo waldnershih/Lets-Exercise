@@ -3,11 +3,17 @@ import { baseVideoUrl, youtubeOptions, videoParams } from './fetchYoutubeVideo';
 import { baseUserUrl, userOptions } from './fetchUser';
 import { baseReviewsUrl, reviewsOptions } from './fetchReviews';
 
+// const baseUrl = 'http://localhost:8000';
+const baseUrl = '/serverapi';
+
 const fetchData = async (url, options, type = 'selfServer') => {
 	options.method = 'GET';
 
+	let concatUrl = url;
+
 	if (type === 'selfServer') {
 		const token = localStorage.getItem('token');
+		concatUrl = `${baseUrl}${url}`;
 
 		if (token) {
 			options.headers.Authorization = `${token}`;
@@ -17,11 +23,12 @@ const fetchData = async (url, options, type = 'selfServer') => {
 	}
 
 	try {
-		const response = await fetch(url, options);
-		if (response.ok) {
-			return await response.json();
-		}
+		const response = await fetch(concatUrl, options);
 
+		if (response.ok) {
+			const data = await response.json();
+			return data;
+		}
 		throw response;
 	} catch (err) {
 		if (
@@ -47,7 +54,7 @@ const postData = async (url, options) => {
 	}
 
 	try {
-		const response = await fetch(url, options);
+		const response = await fetch(`${baseUrl}${url}`, options);
 		if (response.ok) {
 			return await response.json();
 		}
@@ -78,7 +85,7 @@ const putData = async (url, options) => {
 	}
 
 	try {
-		const response = await fetch(url, options);
+		const response = await fetch(`${baseUrl}${url}`, options);
 		if (response.ok) {
 			return await response.json();
 		}
@@ -108,7 +115,7 @@ const patchData = async (url, options) => {
 	}
 
 	try {
-		const response = await fetch(url, options);
+		const response = await fetch(`${baseUrl}${url}`, options);
 		if (response.ok) {
 			return await response.json();
 		}
@@ -136,7 +143,7 @@ const deleteData = async (url, options) => {
 	}
 
 	try {
-		const response = await fetch(url, options);
+		const response = await fetch(`${baseUrl}${url}`, options);
 		if (response.ok) {
 			return await response.json();
 		}

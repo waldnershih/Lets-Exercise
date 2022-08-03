@@ -82,7 +82,7 @@ export const fetchExercisesByTargetMuscle = createAsyncThunk(
 				targetMuscleExerciseUrl,
 				exerciseOptions,
 			);
-			console.log(res);
+
 			return res;
 		} catch (error) {
 			console.log(error);
@@ -217,14 +217,16 @@ export const exerciseSlice = createSlice({
 		// fetchTagList
 		[fetchTagList.pending]: (state, _) => {
 			state.loading.tagListLoading = true;
+			state.error.tagListError = '';
 		},
 		[fetchTagList.fulfilled]: (state, action) => {
 			state.loading.tagListLoading = false;
 			state.tagList = action.payload;
+			state.error.tagListError = '';
 		},
 		[fetchTagList.rejected]: (state, action) => {
 			state.loading.tagListLoading = false;
-			state.error.exerciseError = action.error.message;
+			state.error.tagListError = action.error.message;
 		},
 
 		// fetchReviewRatingByExerciseId

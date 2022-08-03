@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './NotFound.scss';
+import './Schedule.scss';
 
-const NotFound = () => {
+const Schedule = () => {
 	return (
-		<div className="app__notfound">
-			<div className="app__notfound-container">
-				<h1 className="head-text">Not Found - 404</h1>
+		<div className="app__schedule">
+			<div className="app__schedule-container">
+				<h1 className="head-text">Developing Features</h1>
 				<Link to="/">
 					<div>
 						<p className="p-text">Go Home</p>
@@ -20,4 +20,4 @@ const NotFound = () => {
 	);
 };
 
-export default NotFound;
+export default Schedule;

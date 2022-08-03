@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-	useParams,
-	//  useLocation
-} from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import {
 	CardDetails,
 	// Video,
@@ -11,6 +8,7 @@ import {
 	HorizontalCard,
 	Review,
 	BasicVerticalScrollbar,
+	Error,
 } from '../../components';
 import { Divider } from '../../components/Header/Header';
 import {
@@ -49,7 +47,7 @@ const tags = [
 const ExerciseDetail = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
-	// const { pathname } = useLocation();
+	const { pathname } = useLocation();
 	const {
 		selectedExercise,
 		targetMuscleExercises,
@@ -57,14 +55,16 @@ const ExerciseDetail = () => {
 		loading: exerciseLoading,
 		error: exerciseError,
 	} = useSelector(state => state.exercises);
-	// const {
-	// 	videos,
-	// 	loading: videoLoading,
-	// } = useSelector(state => state.videos);
+	// const { videos, loading: videoLoading, error: videoError } = useSelector(
+	// 	state => state.videos,
+	// );
 	const { isAuth } = useSelector(state => state.isAuth);
-	const { reviews, allReviewsLength, loading } = useSelector(
-		state => state.reviews,
-	);
+	const {
+		reviews,
+		allReviewsLength,
+		loading: reviewsLoading,
+		// error: reviewsError,
+	} = useSelector(state => state.reviews);
 
 	const [selectedTag, setSelectedTag] = useState(tags[0].value);
 	const [commentValue, setCommentValue] = useState('');
@@ -86,10 +86,7 @@ const ExerciseDetail = () => {
 		dispatch(fetchExerciseById(id));
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		id,
-		// pathname
-	]);
+	}, [id, pathname]);
 
 	useEffect(
 		() => {
@@ -101,13 +98,6 @@ const ExerciseDetail = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[selectedExercise?._id],
 	);
-
-	// useEffect(() => {
-	// 	if (!error) return;
-
-	// 	setCommentValue('');
-	// 	setRatingValue(0);
-	// }, [error]);
 
 	useEffect(() => {
 		if (targetMuscleExercises.length > 0) {
@@ -195,7 +185,7 @@ const ExerciseDetail = () => {
 	));
 
 	const handleLoadMoreReviews = () => {
-		if (loading) return;
+		if (reviewsLoading) return;
 
 		if (!selectedExercise._id) return;
 
@@ -258,7 +248,16 @@ const ExerciseDetail = () => {
 			<div className="app__section app__exercise-detail">
 				<div className="detail-container">
 					<div className="card-detail-container">
-						<CardDetails data={selectedExercise} />
+						{exerciseLoading.exerciseLoading ? (
+							<Loader />
+						) : exerciseError.exerciseError ? (
+							<Error
+								message={`Exercise detail ${id} is unavailable`}
+							/>
+						) : (
+							<CardDetails data={selectedExercise} />
+						)}
+
 						<Divider />
 						<div className="card-detail-container__comment-title">
 							<h2
@@ -277,7 +276,7 @@ const ExerciseDetail = () => {
 								placeholder="Comment (Maximum 100 characters)"
 								value={commentValue}
 								onChange={e => setCommentValue(e.target.value)}
-								maxLength="170"
+								maxLength="100"
 							/>
 							<div className="card-detail-container__comment-container__action-container">
 								<div className="exercise-detail__rating-box">
@@ -311,7 +310,7 @@ const ExerciseDetail = () => {
 									length={allReviewsLength}
 									items={renderReviews}
 									handleLoadMoreItems={handleLoadMoreReviews}
-									loading={loading}
+									loading={reviewsLoading}
 								/>
 							)}
 						</div>
@@ -334,50 +333,77 @@ const ExerciseDetail = () => {
 							))}
 						</div>
 						{/* {selectedTag === 'recommendedVideos' &&
-							(!videoLoading ? (
-								<div className="video-container">
-									{renderVideos}
-								</div>
-								
-							) : (
-								<Loader flex={1} />
-							))} */}
-						{selectedTag === 'recommendedVideos' && (
-							<Loader flex={1} />
-						)}
-						{selectedExercise.target &&
-							selectedTag === 'similarTargetMuscleExercises' &&
-							(!exerciseLoading.targetMuscleloading ? (
-								!exerciseError.targetMuscleError ? (
-									<BasicVerticalScrollbar
-										length={targetMuscleExercises.length}
-										items={renderTargetMuscleExercises}
-										handleLoadMoreItems={
-											handleLoadMoreTargetMuscleExercises
-										}
-									/>
-								) : (
+							(videoLoading ?
+								<Loader flex={1} /> : 
+								videoError ?
+									<Error /> :
 									<div className="video-container">
-										<p className="p-text-16">
-											No exercises found
-										</p>
+										{renderVideos}
 									</div>
 								)
+						} */}
+
+						{selectedTag === 'recommendedVideos' && (
+							<Error message={'Video is unavailable'} />
+						)}
+						{selectedTag === 'similarTargetMuscleExercises' &&
+							(selectedExercise.target ? (
+								!exerciseLoading.targetMuscleloading ? (
+									!exerciseError.targetMuscleError ? (
+										<BasicVerticalScrollbar
+											length={
+												targetMuscleExercises.length
+											}
+											items={renderTargetMuscleExercises}
+											handleLoadMoreItems={
+												handleLoadMoreTargetMuscleExercises
+											}
+										/>
+									) : (
+										<Error
+											message={
+												'Similar target muscle data is unavailable'
+											}
+										/>
+									)
+								) : (
+									<Loader flex={1} />
+								)
 							) : (
-								<Loader flex={1} />
-							))}
-						{selectedExercise.equipment &&
-							selectedTag === 'similarEquipmentExercises' &&
-							(!exerciseLoading.equipmentLoading ? (
-								<BasicVerticalScrollbar
-									length={equipmentExercises.length}
-									items={renderEquipmentExercises}
-									handleLoadMoreItems={
-										handleLoadMoreEquipmentExercises
+								<Error
+									message={
+										'Similar target muscle data is unavailable'
 									}
 								/>
+							))}
+
+						{selectedTag === 'similarEquipmentExercises' &&
+							(selectedExercise.equipment ? (
+								!exerciseLoading.equipmentLoading ? (
+									!exerciseError.equipmentError ? (
+										<BasicVerticalScrollbar
+											length={equipmentExercises.length}
+											items={renderEquipmentExercises}
+											handleLoadMoreItems={
+												handleLoadMoreEquipmentExercises
+											}
+										/>
+									) : (
+										<Error
+											message={
+												'Similar equipment data is unavailable'
+											}
+										/>
+									)
+								) : (
+									<Loader flex={1} />
+								)
 							) : (
-								<Loader flex={1} />
+								<Error
+									message={
+										'Similar equipment data is unavailable'
+									}
+								/>
 							))}
 					</div>
 				</div>

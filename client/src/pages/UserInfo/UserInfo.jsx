@@ -3,7 +3,7 @@ import Avatar from 'react-avatar-edit';
 import { useSelector, useDispatch } from 'react-redux';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { patchUserProfile } from '../../redux/slices/userSlice';
-import { Loader } from '../../components';
+import { Loader, Error } from '../../components';
 import { AiOutlineCamera } from 'react-icons/ai';
 import { BiUserCircle } from 'react-icons/bi';
 import { FiEdit } from 'react-icons/fi';
@@ -47,7 +47,11 @@ export const CustomiseDialog = ({
 
 const UserInfo = () => {
 	const dispatch = useDispatch();
-	const { userProfile, loading, error } = useSelector(state => state.user);
+	const {
+		userProfile,
+		loading,
+		// error
+	} = useSelector(state => state.user);
 	const [userName, setUserName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	const [image, setImage] = useState({
@@ -70,12 +74,6 @@ const UserInfo = () => {
 		}));
 	}, [userProfile]);
 
-	useEffect(() => {
-		if (!error) return;
-
-		alert(error);
-	}, [error]);
-
 	const handleOnAvatarEditReset = () => {
 		setImage({
 			preview: userProfile.avatar?.base64 || '',
@@ -90,7 +88,7 @@ const UserInfo = () => {
 			return;
 		}
 
-		if (image.preview === userProfile.avatar.base64) {
+		if (image.preview === userProfile.avatar?.base64) {
 			setEditAvatarOpen(false);
 			return;
 		}
@@ -274,13 +272,14 @@ const UserInfo = () => {
 						>
 							<div className="app__user-info__image-container">
 								<Avatar
-									width={300}
-									height={250}
+									width={250}
+									height={230}
 									onCrop={handleOnAvatarCrop}
 									onClose={handleOnAvatarClose}
 									onBeforeFileLoad={handleOnBeforeFileLoad}
 									src={image.src}
 									onFileLoad={handleOnFileLoad}
+									className="app__user-info__image-container__avatar"
 								/>
 								{image.preview ? (
 									<img src={image.preview} alt="Preview" />
@@ -326,9 +325,7 @@ const UserInfo = () => {
 					</div>
 				) : (
 					<div className="app__user-info__container">
-						<div className="app__user-info__detail-container">
-							<h2 className="subhead-text">Nothing Found</h2>
-						</div>
+						<Error />
 					</div>
 				)}
 			</div>

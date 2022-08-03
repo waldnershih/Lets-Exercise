@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BasicCard, Pagination } from '../../components/';
+import { BasicCard, Pagination, Error } from '../../components/';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
@@ -22,7 +22,6 @@ const Home = () => {
 
 	useEffect(() => {
 		dispatch(fetchExercisesByTag('all'));
-		dispatch(fetchTagList());
 		dispatch(setCurrentPage(1));
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,13 +65,11 @@ const Home = () => {
 
 	return (
 		<div className="app__container">
-			{error.exerciseError && (
+			{error.exerciseError ? (
 				<div className="app__section app__home">
-					<p className="p-text-18">{'Data is unavailable'}</p>
+					<Error />
 				</div>
-			)}
-
-			{!loading.exerciseLoading ? (
+			) : !loading.exerciseLoading ? (
 				<div className="app__section app__home">
 					<div className="app__home-card-container">{renderCard}</div>
 					{unSaveExercises && (

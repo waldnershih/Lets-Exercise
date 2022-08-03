@@ -8,6 +8,7 @@ import {
 	Signin,
 	Signup,
 	UserInfo,
+	Schedule,
 } from './pages';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import {
@@ -31,7 +32,10 @@ const App = () => {
 	const dispatch = useDispatch();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const { isAuth } = useSelector(state => state.isAuth);
-	const { userToken, userProfile } = useSelector(state => state.user);
+	const {
+		userToken,
+		// userProfile
+	} = useSelector(state => state.user);
 
 	useEffect(() => {
 		clearUser();
@@ -47,10 +51,10 @@ const App = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isAuth]);
 
-	useEffect(() => {
-		console.log(userProfile);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [userProfile?._id]);
+	// useEffect(() => {
+	// 	console.log(userProfile);
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [userProfile?._id]);
 
 	return (
 		<div className="app">
@@ -91,6 +95,16 @@ const App = () => {
 						exact
 						element={<ExerciseDetail />}
 					/>
+
+					<Route
+						path="/schedule"
+						element={
+							<Protected>
+								<Schedule />
+							</Protected>
+						}
+					/>
+
 					<Route path="/signin" exact element={<Signin />} />
 					<Route path="/signup" exact element={<Signup />} />
 					<Route path="/404" exact element={<NotFound />} />

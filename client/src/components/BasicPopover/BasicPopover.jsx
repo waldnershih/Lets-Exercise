@@ -30,10 +30,16 @@ const BasicPopover = ({
 		>
 			<div className="warning-container">
 				<p className="p-text-16">{title}</p>
-				<div className="option-container">
-					<p onClick={handleOnYesClick}>Yes</p>
-					<p onClick={handleOnNoClick}>No</p>
-				</div>
+				{handleOnYesClick && handleOnNoClick && (
+					<div className="option-container">
+						<p onClick={handleOnYesClick} className="p-text-16">
+							Yes
+						</p>
+						<p onClick={handleOnNoClick} className="p-text-16">
+							No
+						</p>
+					</div>
+				)}
 			</div>
 		</Popover>
 	);

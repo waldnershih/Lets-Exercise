@@ -14,6 +14,7 @@ import Pagination from './Pagination/Pagination';
 import BasicVerticalScrollbar from './BasicVerticalScrollbar/BasicVerticalScrollbar';
 import ScrollToTop from './ScrollToTop/ScrollToTop';
 import Review from './Review/Review';
+import Error from './Error/Error';
 
 export {
 	Header,
@@ -32,4 +33,5 @@ export {
 	BasicVerticalScrollbar,
 	ScrollToTop,
 	Review,
+	Error,
 };

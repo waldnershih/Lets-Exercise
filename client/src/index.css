@@ -6,6 +6,7 @@
 	--font-title: 'Playfair Display', serif;
 
 	--primary-color: #fff9f9;
+	--primary-color-red: #ffe9e9;
 	--secondary-color: #46448d;
 	--secondary-color-20: rgba(70, 68, 141, 10%);
 	/* --secondary-color-20: rgba(28, 117, 235, 10%); */
@@ -108,4 +109,28 @@ a {
 a:hover {
 	/* text-decoration: underline; */
 	color: var(--secondary-color);
+}
+
+@media screen and (max-width: 1200px) {
+	svg {
+		height: 20px;
+		width: 20px;
+	}
+	input,
+	textarea {
+		padding: 8px;
+		font-size: medium;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	svg {
+		height: 16px;
+		width: 16px;
+	}
+	input,
+	textarea {
+		padding: 4px;
+		font-size: small;
+	}
 }
