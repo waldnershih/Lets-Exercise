@@ -3,7 +3,6 @@ import { BasicCard, Pagination, Error } from '../../components/';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	fetchExercisesByTag,
-	fetchTagList,
 	setCurrentPage,
 } from '../../redux/slices/exerciseSlice';
 

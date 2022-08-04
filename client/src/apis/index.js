@@ -3,8 +3,9 @@ import { baseVideoUrl, youtubeOptions, videoParams } from './fetchYoutubeVideo';
 import { baseUserUrl, userOptions } from './fetchUser';
 import { baseReviewsUrl, reviewsOptions } from './fetchReviews';
 
-// const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'https://localhost:5001';
 const baseUrl = '/serverapi';
+// const baseUrl = process.env.REACT_APP_SERVER_URL;
 
 const fetchData = async (url, options, type = 'selfServer') => {
 	options.method = 'GET';
@@ -24,7 +25,7 @@ const fetchData = async (url, options, type = 'selfServer') => {
 
 	try {
 		const response = await fetch(concatUrl, options);
-
+		console.log(response);
 		if (response.ok) {
 			const data = await response.json();
 			return data;
