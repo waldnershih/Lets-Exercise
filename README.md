@@ -1,8 +1,5 @@
 # LETS EXERCISE
 
-## Url
-
--   unavailable yet
 
 ## Arch
 
@@ -12,7 +9,7 @@
 
 -   server
 
-    -   nodejs/ express/ jwt/ dockerfile(not yet)
+    -   nodejs/ express/ jwt/ dockerfile
 
 -   db
     - MongoDB
